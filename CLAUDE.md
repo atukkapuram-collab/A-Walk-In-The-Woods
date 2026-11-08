@@ -63,7 +63,9 @@ If the docs disagree, the scene outline wins on story details and the blueprint 
 
 ## Project state
 
-- Milestones 0-8 are built, committed and pushed to GitHub `main` (fast-forwarded from branch `m8-playtest`, 11/8/2026). Milestone 8 (playtest, balance, build check, README) is awaiting the owner's review and three decisions: the hand-in method, the run length (about 12 minutes against the docs' 20-30), and Early Departure being impossible after Event 5 with the outline's numbers. `docs/handoff.md` has the details.
+- Milestones 0-8 are built, committed and pushed to GitHub `main` (fast-forwarded from branch `m8-playtest`, 11/8/2026).
+- **Live on GitHub Pages:** https://atukkapuram-collab.github.io/A-Walk-In-The-Woods/ . `.github/workflows/deploy.yml` runs the tests, builds and publishes `dist/` on every push to `main` (Pages source: GitHub Actions). So anything pushed to `main` goes public: keep work on branches until it's ready.
+- Milestone 8 (playtest, balance, build check, README) is awaiting the owner's review and two decisions: the run length (about 12 minutes against the docs' 20-30), and Early Departure being impossible after Event 5 with the outline's numbers. `docs/handoff.md` has the details.
 - All sound is generated in code (Web Audio); there are no audio files. Don't add downloaded sounds without the owner's go-ahead and a license check. `docs/handoff.md` has the details.
 - In the event data, lines marked `// DOC` are quoted word for word from the creative docs; every other line is new writing that the owner reviews.
 - Run with `npm install` then `npm run dev` (http://localhost:8080). `npm test` runs Vitest; `npm run build` writes `dist/`.

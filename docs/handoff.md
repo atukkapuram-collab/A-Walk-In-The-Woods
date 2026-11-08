@@ -2,9 +2,9 @@
 
 Read this first when picking up the project. It is updated at the end of every milestone (see section 4 of [implementation-plan.md](implementation-plan.md)). Keep each section short; replace it rather than appending history.
 
-**Last updated:** 11/8/2026, Milestone 8 (playtest, balance and hand-in) done as far as it can go without the owner. **Three owner decisions are open** (section 5).
+**Last updated:** 11/8/2026, Milestone 8 (playtest, balance and hand-in) done as far as it can go without the owner. **Two owner decisions are open** (section 5).
 **Current developer:** project owner.
-**Branch:** `main`. Milestones 0-8 are committed and pushed to GitHub `main`. The game is not published anywhere (no itch.io or Pages yet).
+**Branch:** `main`. Milestones 0-8 are committed and pushed to GitHub `main`, and the game is **live on GitHub Pages**: https://atukkapuram-collab.github.io/A-Walk-In-The-Woods/ (rebuilt on every push to `main` by `.github/workflows/deploy.yml`).
 
 ## 1. Completed features
 
@@ -82,12 +82,7 @@ Playtest checklist for a person:
 ## 5. Known bugs and incomplete features (owner decisions)
 
 - No known bugs.
-- **Decision 1, hand-in method** (plan, question 2). The build is ready for any of these:
-  - **itch.io:** upload a zip of `dist/` as an HTML game. Easiest for a teacher to open.
-  - **GitHub Pages:** serve `dist/` from the repo.
-  - **A zip of `dist/`:** the person opening it would need to run a local server.
-
-  Nothing is published without your go-ahead.
+- **Hand-in method: decided.** The game is on GitHub Pages (link above); share that link with the professor. itch.io is still possible later.
 - **Decision 2, run length** (plan, question 4). About 12 minutes per run against the docs' 20-30. Options:
   - count replays (four endings) toward the total;
   - lengthen the maps toward the blueprint's 1-2 minutes between events;

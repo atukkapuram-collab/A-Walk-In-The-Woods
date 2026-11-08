@@ -6,6 +6,8 @@
 
 Built with Phaser as a browser game, due 11/17/2026.
 
+**Play it online:** https://atukkapuram-collab.github.io/A-Walk-In-The-Woods/
+
 ## How to play
 
 You and your old friend Katz set out to walk the whole Appalachian Trail,
@@ -54,6 +56,9 @@ npm run dev
 ```
 
 Then open http://localhost:8080. Other commands: `npm test` (Vitest), `npm run build` (production build in `dist/`), `npm run preview` (serve the built version).
+
+Every push to `main` rebuilds the game and publishes it to the link above
+(`.github/workflows/deploy.yml`; the tests must pass first).
 
 The built game in `dist/` is three files (about 1.4 MB) with relative paths,
 so it can be hosted from any folder or web address. Like most browser games it
