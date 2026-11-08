@@ -63,7 +63,7 @@ If the docs disagree, the scene outline wins on story details and the blueprint 
 
 ## Project state
 
-- Milestones 0-8 are built, uncommitted, on branch `m8-playtest`. Milestone 8 (playtest, balance, build check, README) is awaiting the owner's review and three decisions: the hand-in method, the run length (about 12 minutes against the docs' 20-30), and Early Departure being impossible after Event 5 with the outline's numbers. `docs/handoff.md` has the details.
+- Milestones 0-8 are built and committed locally on branch `m8-playtest` (not pushed yet). Milestone 8 (playtest, balance, build check, README) is awaiting the owner's review and three decisions: the hand-in method, the run length (about 12 minutes against the docs' 20-30), and Early Departure being impossible after Event 5 with the outline's numbers. `docs/handoff.md` has the details.
 - All sound is generated in code (Web Audio); there are no audio files. Don't add downloaded sounds without the owner's go-ahead and a license check. `docs/handoff.md` has the details.
 - In the event data, lines marked `// DOC` are quoted word for word from the creative docs; every other line is new writing that the owner reviews.
 - Run with `npm install` then `npm run dev` (http://localhost:8080). `npm test` runs Vitest; `npm run build` writes `dist/`.
@@ -108,8 +108,9 @@ Installed with `npx skills add ... --agent claude-code`:
 15. Built Milestone 6 (title, opening with name entry, act cards, travel screen, ending template, Endings Found, settings, pause, fades) on branch `m6-screens`.
 16. Built Milestone 7 (code-generated sound effects and music on two volume buses, result-card bounce, footstep dust, outlined and shaded sprites) on branch `m7-polish`.
 17. Milestone 8 on branch `m8-playtest`: a balance test over every choice path, all four endings played from the title, a run-length estimate, the built `dist/` checked, and the README's how-to-play section.
+18. Added the book credit to the title screen and committed Milestones 0-8 locally on `m8-playtest`.
 
 ## Repo state
 
-- `.claude/skills/`, `skills-lock.json`, this file and the docs are committed on `main`. Milestones 0-8 and the doc updates since the last commit are uncommitted on branch `m8-playtest`.
+- `.claude/skills/`, `skills-lock.json`, this file and the docs are committed on `main`. Milestones 0-8 are committed on the local branch `m8-playtest`; it is not pushed and not merged into `main`. The older milestone branches `m0-setup` to `m7-polish` were never committed to and still point at the docs commit on `main`.
 - `skills-lock.json` is written by the skills CLI. It does not include the hand-installed `narrative-design`.
