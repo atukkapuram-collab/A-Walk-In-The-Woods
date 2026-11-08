@@ -1,8 +1,8 @@
-# White Blazes: Scene-by-Scene Outline
+# Trail Mix: Scene-by-Scene Outline
 
 ## How to read this outline
 
-This outline breaks the story in *A Walk in the Woods Game: Story & Endings* (docs/story.md) into **16 scenes**: an opening, 8 decision events, 2 quiet story beats, a final choice and 4 endings. It keeps the same story, characters and stats.
+This outline breaks the story in *Trail Mix: Story & Endings* (docs/story.md) into **16 scenes**: an opening, 8 decision events, 2 quiet story beats, a final choice and 4 endings. It keeps the same story, characters and stats.
 
 Each scene lists:
 - **Purpose:** why the scene exists.

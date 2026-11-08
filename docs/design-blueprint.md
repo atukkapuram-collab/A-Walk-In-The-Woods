@@ -1,10 +1,10 @@
-# White Blazes: Game Design Blueprint
+# Trail Mix: Game Design Blueprint
 
 See also: docs/story.md (story and endings) and docs/scene-outline.md (scene-by-scene outline).
 
 ## Overview
 
-**One-line pitch:** walk the Appalachian Trail with Katz in a cozy top-down pixel world, where every few minutes the trail throws a problem at you and your choice shapes the journey and its ending.
+**One-line pitch:** in *Trail Mix*, you walk the Appalachian Trail with Katz in a cozy top-down pixel world, where every few minutes the trail throws a problem at you and your choice shapes the journey and its ending.
 
 **The blend:**
 - **Pokémon-style exploration:** you walk a tile-based map in four directions, the camera follows you, and Katz follows one tile behind.
@@ -124,7 +124,7 @@ There are four trail maps in a fixed order, covering the planning doc's three to
 4. Buttons: **Walk Again** (back to the title) and **See Endings Found** (a list of the four endings, with locked ones shown as "???"). This encourages replays.
 
 **All screens**
-- **Title screen:** a pixel trail scene, "White Blazes", with Start, Settings and Quit.
+- **Title screen:** a pixel trail scene, "Trail Mix", with Start, Settings and Quit.
 - **Settings:** music volume, sound effects volume, text speed (slow, normal, instant).
 - **Tutorial:** built into Map 1 rather than a separate screen. On-screen hints ("Arrow keys to walk", "Space to talk") appear on the first steps, and the Outfitter event explains the choice menu and stats.
 - **Pause menu** (Esc): Resume, Settings, Quit to Title.

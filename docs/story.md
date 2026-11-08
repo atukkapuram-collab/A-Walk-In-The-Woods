@@ -1,8 +1,8 @@
-# A Walk in the Woods Game: Story & Endings
+# Trail Mix: Story & Endings
 
 ## Story at a glance
 
-**Working title:** *White Blazes* (the Appalachian Trail is marked by white paint blazes on trees, and following them is the whole game).
+**Title:** *Trail Mix*, a game based on Bill Bryson's *A Walk in the Woods*. (The earlier working title was *White Blazes*, after the white paint blazes that mark the Appalachian Trail. Following them is still the whole game.)
 
 **Premise:** You've spent twenty years at a desk. On a gray winter night, after reading one too many hiking blogs, you announce that you'll walk the entire Appalachian Trail, 2,190 miles from Georgia to Maine. Everyone you invite says no, except Stephen Katz, an old school friend you haven't talked to in years. He is out of shape, overconfident and very bad at camping. Together you set out to conquer the trail. The trail has other plans.
 
