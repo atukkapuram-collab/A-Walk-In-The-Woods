@@ -31,7 +31,7 @@ The implementation plan and milestone order are in [docs/implementation-plan.md]
 **Code and git:**
 - Keep changes small and focused, with systems, maps and each act's events in separate files, so a handoff (or working side by side later) doesn't cause merge conflicts.
 - Story text, choices, stat effects and map layouts live in data files (`src/data/`), not inside scene code.
-- One branch per milestone. Don't commit straight to `main` once code exists. Commit only when asked.
+- One branch per milestone (new work branches off `main`). Don't commit straight to `main` once code exists. Commit only when asked.
 - **Never push to GitHub, open a PR or merge unless the developer you're working with explicitly asks for it in that conversation.**
 
 ## Planning document
@@ -63,7 +63,7 @@ If the docs disagree, the scene outline wins on story details and the blueprint 
 
 ## Project state
 
-- Milestones 0-8 are built and committed locally on branch `m8-playtest` (not pushed yet). Milestone 8 (playtest, balance, build check, README) is awaiting the owner's review and three decisions: the hand-in method, the run length (about 12 minutes against the docs' 20-30), and Early Departure being impossible after Event 5 with the outline's numbers. `docs/handoff.md` has the details.
+- Milestones 0-8 are built, committed and pushed to GitHub `main` (fast-forwarded from branch `m8-playtest`, 11/8/2026). Milestone 8 (playtest, balance, build check, README) is awaiting the owner's review and three decisions: the hand-in method, the run length (about 12 minutes against the docs' 20-30), and Early Departure being impossible after Event 5 with the outline's numbers. `docs/handoff.md` has the details.
 - All sound is generated in code (Web Audio); there are no audio files. Don't add downloaded sounds without the owner's go-ahead and a license check. `docs/handoff.md` has the details.
 - In the event data, lines marked `// DOC` are quoted word for word from the creative docs; every other line is new writing that the owner reviews.
 - Run with `npm install` then `npm run dev` (http://localhost:8080). `npm test` runs Vitest; `npm run build` writes `dist/`.
@@ -108,9 +108,9 @@ Installed with `npx skills add ... --agent claude-code`:
 15. Built Milestone 6 (title, opening with name entry, act cards, travel screen, ending template, Endings Found, settings, pause, fades) on branch `m6-screens`.
 16. Built Milestone 7 (code-generated sound effects and music on two volume buses, result-card bounce, footstep dust, outlined and shaded sprites) on branch `m7-polish`.
 17. Milestone 8 on branch `m8-playtest`: a balance test over every choice path, all four endings played from the title, a run-length estimate, the built `dist/` checked, and the README's how-to-play section.
-18. Added the book credit to the title screen and committed Milestones 0-8 locally on `m8-playtest`.
+18. Added the book credit to the title screen, committed Milestones 0-8, and (with the owner's go-ahead) fast-forwarded `main` and pushed it to GitHub.
 
 ## Repo state
 
-- `.claude/skills/`, `skills-lock.json`, this file and the docs are committed on `main`. Milestones 0-8 are committed on the local branch `m8-playtest`; it is not pushed and not merged into `main`. The older milestone branches `m0-setup` to `m7-polish` were never committed to and still point at the docs commit on `main`.
+- `.claude/skills/`, `skills-lock.json`, this file and the docs are committed on `main`. Milestones 0-8 are on `main`, locally and on GitHub. The older local milestone branches `m0-setup` to `m7-polish` were never committed to (they point at the docs commit) and were not pushed.
 - `skills-lock.json` is written by the skills CLI. It does not include the hand-installed `narrative-design`.

@@ -4,7 +4,7 @@ Read this first when picking up the project. It is updated at the end of every m
 
 **Last updated:** 11/8/2026, Milestone 8 (playtest, balance and hand-in) done as far as it can go without the owner. **Three owner decisions are open** (section 5).
 **Current developer:** project owner.
-**Branch:** `m8-playtest`. Milestones 0-8 are committed locally on this branch; not pushed, not merged into `main`, nothing published.
+**Branch:** `main`. Milestones 0-8 are committed and pushed to GitHub `main`. The game is not published anywhere (no itch.io or Pages yet).
 
 ## 1. Completed features
 
@@ -102,4 +102,4 @@ Playtest checklist for a person:
 
 ## 6. Next milestone
 
-- Milestone 8 is the last milestone. What's left is the three decisions above, a playtest by a real person, pushing the branch (only when the owner approves), and the hand-in (only with the owner's go-ahead).
+- Milestone 8 is the last milestone. What's left is the three decisions above, a playtest by a real person, and the hand-in (only with the owner's go-ahead).
