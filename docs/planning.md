@@ -48,7 +48,7 @@ Artistic Style and Requirements:
 	The game should include basic:
 Forests, Mountains, Rivers, Rocky Paths, Campsites
 Character Sprites with Simple Animations
-Minimum three to four settings (each setting similar to a side scroller), including landscapes and isolated portions of the trail
+Minimum three to four settings (each setting explored top-down in the older Pokemon style), including landscapes and isolated portions of the trail
 Weather and lighting to reflect the changing conditions
 Slightly rugged and adventurous aesthetic, yet still presented slightly cute or cozy
 	The game will draw inspiration of the visuals from games like Stardew Valley and Terraria, while also being combined with the small, contained exploration of a wilderness adventure game.
@@ -62,7 +62,7 @@ Continue progressing the trail
 Repeat
 `	The game will have the player explore various sections of the Appalachian Trail in order to get a quick overview of the whole trail, while facing interactive obstacles which get resolved through decisions.
 	The game should include:
-Exploration of minimum three to four settings (each setting similar to a side scroller), including landscapes and isolated portions of the trail
+Exploration of minimum three to four settings (each setting explored top-down in the older Pokemon style), including landscapes and isolated portions of the trail
 Decisions from hiking challenges and unexpected obstacles
 Management of a few basic resources
 Decisions affecting progress and relationships with the companion

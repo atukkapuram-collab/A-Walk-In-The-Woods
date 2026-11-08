@@ -18,7 +18,7 @@ Summary of the plan:
 - **Art:** 2D pixel art in a Stardew Valley / Terraria style: rugged but cozy, with forests, mountains, rivers, rocky paths, campsites, weather and lighting, and simple character animation.
 - **Endings:** Finished Trail, Broken Partnership, Early Departure, Changed Route (the one closest to Bryson's book). The plan lists the factors that decide each.
 
-Open question: the plan asks for a top-down, older-Pokemon-style view and also calls each setting "similar to a side scroller". Confirm which perspective each part of the game uses before building maps, physics or art.
+Perspective: top-down, older-Pokemon-style exploration for every setting (no side-scrolling). Use top-down movement and tilemaps in Phaser, not platformer physics.
 
 ## Project state
 
