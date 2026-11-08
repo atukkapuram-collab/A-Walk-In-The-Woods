@@ -20,9 +20,19 @@ Summary of the plan:
 
 Perspective: top-down, older-Pokemon-style exploration for every setting (no side-scrolling). Use top-down movement and tilemaps in Phaser, not platformer physics.
 
+## Story and design docs
+
+Read these before writing game content or code. Together with docs/planning.md they define the game:
+
+- [docs/story.md](docs/story.md): the story *White Blazes*: premise, characters (the Hiker, Katz, Dale, Sunshine, Hazel), the four stats, the three acts, the 8 decision events and the 4 endings.
+- [docs/scene-outline.md](docs/scene-outline.md): the 16 scenes in order, with each scene's purpose, choices and stat effects, the two flags (skipped ahead, left the wilderness), the ending checks, continuity rules and the cut list.
+- [docs/design-blueprint.md](docs/design-blueprint.md): how the game plays: top-down exploration with Katz following, the event/dialogue/choice/result-card flow, the HUD, the four maps and travel screens, the ending template and the 10-hour build plan.
+
+If the docs disagree, the scene outline wins on story details and the blueprint wins on gameplay. All three are exported from Claude Docs; ask before rewriting them.
+
 ## Project state
 
-- Early stage: the repo holds only `README.md`, `skills-lock.json` and the installed skills in `.claude/skills/`. No game code or assets yet.
+- Early stage: the repo holds `README.md`, `skills-lock.json`, the installed skills in `.claude/skills/` and the docs in `docs/`. No game code or assets yet.
 - Many installed skills are for other engines (Godot, Unity, Unreal, Roblox, etc.) and don't apply.
 - Most relevant for this game: `phaser-core`, `phaser-arcade-physics`, `make-game`, `game-assets`, `pixel-art-sprites`, `narrative-design`, `dialogue-systems`, `level-design`, `game-ui-ux`, `save-systems`, `game-jam` (for scoping to a deadline). Use `router` if unsure which skill applies.
 
