@@ -17,10 +17,22 @@ export const LEGEND = {
     M: 'roof',
     Y: 'wall',
     Q: 'door',
+    // Milestone 12: Pennsylvania and the White Mountains.
+    O: 'boulder', // solid heap of rocks
+    A: 'alpine', // walkable bare ground above the treeline
+    C: 'cairn', // stacked stones marking the trail
+    '~': 'crackedRoad', // the abandoned highway near Centralia (walkable)
+    V: 'vent', // a smoking crack
+    Z: 'phone', // payphone: face it and press Space (a sign with an `event`)
+    U: 'car',
+    // Milestone 14: a sign and an overlook ledge on alpine ground.
+    '%': 'signAlpine',
+    '&': 'ledgeAlpine',
     // Gates (solid until their event is finished; listed in the map's `gates`):
     G: 'gate', // fallen log
     D: 'drift', // snowdrift
-    H: 'riverGate' // rain-swollen river; opens to stepping stones ('ford')
+    H: 'riverGate', // rain-swollen river; opens to stepping stones ('ford')
+    J: 'barrier' // road barrier; opens to 'road'
 };
 
-export const GATE_CHARS = ['G', 'D', 'H'];
+export const GATE_CHARS = ['G', 'D', 'H', 'J'];

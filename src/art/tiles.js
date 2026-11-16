@@ -68,8 +68,8 @@ function gate(p, c) {
     p.px(14, 8, c.log);
 }
 
-function sign(p, c) {
-    grass(p, c);
+function sign(p, c, base = grass) {
+    base(p, c);
     p.rect(7, 9, 2, 7, c.trunk);
     p.rect(2, 3, 12, 7, c.trunk);
     p.rect(3, 4, 10, 5, c.signBoard);
@@ -100,8 +100,8 @@ function campfire(p, c) {
 }
 
 // The scenic overlook: a rocky ledge with a view. Face it and press Space.
-function ledge(p, c) {
-    grass(p, c);
+function ledge(p, c, base = grass) {
+    base(p, c);
     p.rect(0, 6, 16, 10, c.rockDark);
     p.rect(1, 5, 14, 9, c.rock);
     p.rect(2, 5, 12, 2, c.rockLight);
@@ -168,6 +168,81 @@ function road(p, c) {
     }
 }
 
+// --- Milestone 12: Pennsylvania and the White Mountains ---
+
+// A heap of boulders: Pennsylvania's rocks, and the walls above the treeline.
+function boulder(p, c) {
+    p.rect(0, 0, 16, 16, c.rockDark);
+    p.disc(5, 5, 4, c.rock);
+    p.disc(11, 10, 5, c.rock);
+    p.disc(4, 12, 3, c.rock);
+    p.rect(3, 3, 3, 1, c.rockLight);
+    p.rect(9, 7, 4, 1, c.rockLight);
+    p.px(3, 11, c.rockLight);
+}
+
+// Bare ground above the treeline: gravel with a few tufts.
+function alpine(p, c) {
+    p.rect(0, 0, 16, 16, c.scree);
+    for (const [x, y] of [[2, 3], [10, 2], [6, 8], [13, 11], [3, 13]]) p.rect(x, y, 2, 1, c.screeDark);
+    for (const [x, y] of [[7, 4], [12, 7], [1, 9], [9, 13]]) p.px(x, y, c.screeLight);
+    p.rect(5, 11, 1, 2, c.grassDark);
+    p.rect(12, 3, 1, 2, c.grassDark);
+}
+
+// A cairn: the stacked stones that mark the trail where there are no trees to paint.
+function cairn(p, c) {
+    alpine(p, c);
+    p.disc(8, 12, 4, c.rockDark);
+    p.disc(8, 11, 3, c.rock);
+    p.disc(8, 7, 2, c.rock);
+    p.rect(7, 3, 3, 2, c.rockLight);
+    p.px(7, 10, c.rockLight);
+}
+
+// The abandoned highway near Centralia: cracked and buckled.
+function crackedRoad(p, c) {
+    road(p, c);
+    for (const [x, y, w, h] of [[2, 4, 5, 1], [6, 5, 1, 4], [7, 8, 5, 1], [11, 9, 1, 5], [3, 12, 4, 1]]) p.rect(x, y, w, h, '#3a3632');
+}
+
+// A crack where smoke from the mine fire leaks out.
+function vent(p, c) {
+    crackedRoad(p, c);
+    p.disc(8, 11, 3, '#2a2623');
+    p.disc(7, 6, 2, '#c9c5bd');
+    p.disc(10, 3, 2, '#dedad2');
+    p.px(6, 2, '#eeeae2');
+}
+
+// A payphone on a post.
+function phone(p, c) {
+    grass(p, c);
+    p.rect(7, 10, 2, 6, c.rockDark);
+    p.rect(4, 2, 8, 9, '#2f5f9f');
+    p.rect(5, 3, 6, 3, '#cfe0f0');
+    p.rect(6, 7, 4, 3, '#1f3f6f');
+}
+
+// Bryson's parked car, from above.
+function car(p, c) {
+    road(p, c);
+    p.rect(3, 1, 10, 14, '#a8382c');
+    p.rect(4, 4, 8, 3, '#cfe0f0');
+    p.rect(4, 11, 8, 2, '#cfe0f0');
+    p.rect(4, 8, 8, 2, '#c24a3c');
+    for (const [x, y] of [[2, 3], [13, 3], [2, 11], [13, 11]]) p.rect(x, y, 1, 3, '#1d1712');
+}
+
+// A striped barrier across the road (a gate).
+function barrier(p, c) {
+    road(p, c);
+    p.rect(0, 6, 16, 3, '#f4f1e8');
+    for (const x of [1, 7, 13]) p.rect(x, 6, 3, 3, '#c0392b');
+    p.rect(1, 9, 2, 5, c.rockDark);
+    p.rect(13, 9, 2, 5, c.rockDark);
+}
+
 export const TILE_DEFS = [
     { name: 'grass', solid: false, draw: grass },
     { name: 'path', solid: false, draw: path },
@@ -187,5 +262,16 @@ export const TILE_DEFS = [
     { name: 'roof', solid: true, draw: roof },
     { name: 'wall', solid: true, draw: wall },
     { name: 'door', solid: true, draw: door },
-    { name: 'road', solid: false, draw: road }
+    { name: 'road', solid: false, draw: road },
+    { name: 'boulder', solid: true, draw: boulder },
+    { name: 'alpine', solid: false, draw: alpine },
+    { name: 'cairn', solid: true, draw: cairn },
+    { name: 'crackedRoad', solid: false, draw: crackedRoad },
+    { name: 'vent', solid: true, draw: vent },
+    { name: 'phone', solid: true, draw: phone },
+    { name: 'car', solid: true, draw: car },
+    { name: 'barrier', solid: true, draw: barrier },
+    // Milestone 14: the sign and the overlook ledge above the treeline (no grass under them).
+    { name: 'signAlpine', solid: true, draw: (p, c) => sign(p, c, alpine) },
+    { name: 'ledgeAlpine', solid: true, draw: (p, c) => ledge(p, c, alpine) }
 ];

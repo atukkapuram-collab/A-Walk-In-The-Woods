@@ -8,7 +8,7 @@ import { Menu } from '../ui/Menu.js';
 import { UI, textStyle, drawPanel } from '../ui/theme.js';
 
 // Endings Found (design blueprint, Ending presentation): the four endings,
-// with ones not reached yet shown as "???". Read from the save, so it
+// with ones not reached yet shown as "???", and the book's own ending tagged. Read from the save, so it
 // survives a reload. Opened over the ending screen; Back (or Esc) returns.
 export class EndingsFoundScene extends Scene {
     constructor() {
@@ -31,7 +31,9 @@ export class EndingsFoundScene extends Scene {
 
         list.forEach((e, i) => {
             const rowY = y + 86 + i * 72;
-            this.add.text(x + 48, rowY, `${i + 1}.  ${e.name}`, textStyle(22, { color: e.found ? UI.text : UI.muted }));
+            const name = this.add.text(x + 48, rowY, `${i + 1}.  ${e.name}`, textStyle(22, { color: e.found ? UI.text : UI.muted }));
+            // Which ending is the book's own (shown once it has been found).
+            if (e.tag) this.add.text(name.x + name.width + 16, rowY + 5, e.tag, textStyle(15, { color: UI.name }));
             if (e.found) this.add.text(x + 92, rowY + 30, e.lesson, textStyle(15, { fontStyle: 'italic', color: UI.muted, wordWrap: { width: w - 140 } }));
         });
 

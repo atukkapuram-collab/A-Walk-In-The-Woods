@@ -12,11 +12,17 @@ import { checkEnding } from '../src/state/endings.js';
 // The order the story's decision events happen in (story beats with no
 // choice change no stats). `check` marks the mid-trip ending checks; the
 // overlook (Morale +1, optional) can be visited on each map before its events.
+// The whole book (Milestones 11-13): E1-E13 and the Final Crossroads. Bond is
+// frozen from E8 until the phone call (E11), exactly as in the game. Scenes
+// with no choice (Home in Hanover, the Reunion) apply their cards, if any.
 const ROUTE = [
-    { overlook: true }, 'event1_outfitter', 'event2_going_home',
-    { overlook: true }, 'event3_whiteout', 'event4_night_visitor',
-    { overlook: true }, { id: 'event5_pine_gap', check: true }, 'event6_last_bottle',
-    { overlook: true }, 'event7_river', { id: 'event8_fall', check: true },
+    'e1_outfitter',
+    { overlook: true }, 'e2_lightens_load', 'e3_mary_ellen',
+    { overlook: true }, 'e4_snowstorm', 'e5_night_noises', { id: 'e6_rental_car', check: true },
+    { overlook: true }, 'e7_skyline', { id: 'e8_katz_goes_home', check: true },
+    'home_in_hanover', { overlook: true }, 'e9_car_hiking',
+    { overlook: true }, 'e10_mount_washington', { id: 'e11_phone_call', check: true },
+    'reunion', { overlook: true }, 'e12_river', { id: 'e13_katz_is_lost', check: true },
     'final_crossroads'
 ];
 
@@ -54,12 +60,18 @@ export function simulate({ overlooks }) {
         }
         const id = stop.id ?? stop;
         const event = EVENTS[id];
+        if (optionCount(event) === 0) {
+            // A scene with a fixed result card and no choice.
+            const next = clone(state);
+            for (const s of event.steps.filter((x) => x.result !== undefined)) next.apply(s.effects ?? {}, s.flags ?? {});
+            return walk(k + 1, next, path);
+        }
         const hasCoin = (i) => event.steps.find((s) => s.choose).choose[i].chance;
         for (let i = 0; i < optionCount(event); i++) {
             for (const roll of hasCoin(i) ? [0.1, 0.9] : [0.1]) {
                 const next = clone(state);
                 const outcome = playEvent(event, i, next, roll);
-                next.apply(outcome.effects, outcome.flags);
+                next.apply(outcome.effects, outcome.flags, { bondWhileAway: Boolean(event.bondWhileAway) });
                 const p = [...path, `${id}:${outcome.optionId}`];
                 if (outcome.final) {
                     results.push({ ending: checkEnding(next.snapshot, outcome.final), at: 'final', path: p, state: next.snapshot });
@@ -95,7 +107,7 @@ describe('balance: every path through the story', () => {
     const reached = (results, ending, at) => results.some((r) => r.ending === ending && (!at || r.at === at));
 
     it('walks every combination of choices', () => {
-        // 3*3*3*3*4*(3+1 coin)*3*3*3 paths, minus the ones that end early.
+        // 3^13 paths through the decision events, minus the ones that end early.
         expect(without.length).toBeGreaterThan(1000);
     });
 
@@ -107,20 +119,22 @@ describe('balance: every path through the story', () => {
         }
     });
 
-    it('Broken Partnership can trigger after Event 5 and after Event 8; Early Departure after Event 8', () => {
-        expect(reached(without, 'brokenPartnership', 'event5_pine_gap')).toBe(true);
-        expect(reached(without, 'brokenPartnership', 'event8_fall')).toBe(true);
-        expect(reached(without, 'earlyDeparture', 'event8_fall')).toBe(true);
+    // Milestone 9's numbers fixed the Milestone 8 finding: both early endings
+    // can now trigger at the first check (E6) as well as at E8.
+    it('Broken Partnership and Early Departure can both trigger at every check: E6, E8, E11 and E13', () => {
+        for (const at of ['e6_rental_car', 'e8_katz_goes_home', 'e11_phone_call', 'e13_katz_is_lost']) {
+            expect(reached(without, 'brokenPartnership', at), `broken @ ${at}`).toBe(true);
+            expect(reached(without, 'earlyDeparture', at), `early @ ${at}`).toBe(true);
+        }
     });
 
-    // PLAYTEST FINDING (Milestone 8, owner's decision): with the outline's
-    // numbers, Early Departure can NOT trigger at the check after Event 5. The
-    // worst case by then is Stamina 2, Supplies 2, Morale 4 (the check needs a
-    // 0, or Morale 2 or less). The plan's test list expects it to be possible.
-    // This test states today's fact so any change to the numbers shows up here.
-    it('Early Departure after Event 5 is currently impossible (see docs/handoff.md)', () => {
-        expect(reached(without, 'earlyDeparture', 'event5_pine_gap')).toBe(false);
-        expect(reached(withOverlooks, 'earlyDeparture', 'event5_pine_gap')).toBe(false);
+    it('Changed Route, the book\'s ending, is the most common ending', () => {
+        for (const results of [withOverlooks, without]) {
+            const count = (id) => results.filter((r) => r.ending === id).length;
+            for (const other of ['brokenPartnership', 'earlyDeparture', 'finishedTrail']) {
+                expect(count('changedRoute'), other).toBeGreaterThan(count(other));
+            }
+        }
     });
 
     it('Finished Trail is never reached with a flag set', () => {

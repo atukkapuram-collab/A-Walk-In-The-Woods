@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { buildCharacterFrames, KATZ_SHAPE, FACINGS, POSES } from '../src/art/sprites.js';
-import { HIKER, KATZ, SALESMAN, DALE } from '../src/art/palettes.js';
+import { HIKER, KATZ, SALESMAN, DRIVER } from '../src/art/palettes.js';
 import { TILE_DEFS } from '../src/art/tiles.js';
 import { ICONS, ICON_SIZE } from '../src/art/icons.js';
 import { STATS } from '../src/state/GameState.js';
@@ -9,7 +9,7 @@ describe.each([
     ['hiker', buildCharacterFrames(), HIKER],
     ['katz', buildCharacterFrames(KATZ_SHAPE), KATZ],
     ['salesman', buildCharacterFrames(KATZ_SHAPE), SALESMAN],
-    ['dale', buildCharacterFrames(), DALE]
+    ['driver', buildCharacterFrames(), DRIVER]
 ])('%s sprite', (name, frames, palette) => {
     it('has all 12 frames (4 facings x stand + 2 walk poses)', () => {
         const expected = FACINGS.flatMap((f) => POSES.map((p) => `${f}-${p}`)).sort();
@@ -36,9 +36,9 @@ describe('tiles', () => {
         expect(names).toEqual(expect.arrayContaining(['grass', 'path', 'tree', 'blazeTree', 'rock', 'water', 'gate']));
     });
 
-    it('only ground tiles are walkable (grass, path, snow, road, river stepping stones)', () => {
+    it('only ground tiles are walkable (grass, path, snow, roads, alpine ground, river stepping stones)', () => {
         const walkable = TILE_DEFS.filter((t) => !t.solid).map((t) => t.name).sort();
-        expect(walkable).toEqual(['ford', 'grass', 'path', 'road', 'snow']);
+        expect(walkable).toEqual(['alpine', 'crackedRoad', 'ford', 'grass', 'path', 'road', 'snow']);
     });
 });
 

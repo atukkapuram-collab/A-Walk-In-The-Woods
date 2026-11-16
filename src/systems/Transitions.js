@@ -5,7 +5,7 @@ import { TUNING } from '../data/tuning.js';
 
 // Scenes that run on top of others. They are stopped on every scene change,
 // so nothing (HUD, a dialogue box, a menu) leaks into the next screen.
-export const OVERLAYS = ['HUD', 'Dialogue', 'Pause', 'Settings', 'EndingsFound'];
+export const OVERLAYS = ['HUD', 'Dialogue', 'Pause', 'Settings', 'EndingsFound', 'Journal', 'Credits'];
 // Scenes that can be left paused under a menu (Pause > Quit to Title).
 const UNDERLAYS = ['Trail', 'Ending', 'Title', 'Opening'];
 

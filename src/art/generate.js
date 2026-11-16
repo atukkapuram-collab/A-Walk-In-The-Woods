@@ -1,20 +1,23 @@
 import { TILE_SIZE } from '../config.js';
-import { SEASONS, HIKER, KATZ, SALESMAN, DALE, SUNSHINE, HAZEL } from './palettes.js';
+import { SEASONS, HIKER, KATZ, SALESMAN, MARY_ELLEN, HIKER_1, CLERK, DAYTRIPPER, DRIVER } from './palettes.js';
 import { TILE_DEFS } from './tiles.js';
-import { buildCharacterFrames, KATZ_SHAPE, SPRITE_SIZE } from './sprites.js';
+import { buildCharacterFrames, KATZ_SHAPE, BILL_SHAPE, MARY_ELLEN_SHAPE, SPRITE_SIZE } from './sprites.js';
 import { ICONS, ICON_SIZE } from './icons.js';
 
 // Draws every placeholder texture into Phaser's texture manager.
 // Called once from BootScene. Real art can later replace a texture under the same key.
 export function generateArt(scene) {
-    // One tileset per season: 'tiles-spring', 'tiles-smokies', 'tiles-summer', 'tiles-autumn'.
+    // One tileset per season: 'tiles-spring', 'tiles-smokies', 'tiles-summer', 'tiles-autumn', 'tiles-alpine'.
     for (const [name, palette] of Object.entries(SEASONS)) makeTileset(scene, `tiles-${name}`, palette);
-    makeCharacter(scene, 'hiker', HIKER, buildCharacterFrames());
+    makeCharacter(scene, 'hiker', HIKER, buildCharacterFrames(BILL_SHAPE)); // Bill Bryson
     makeCharacter(scene, 'katz', KATZ, buildCharacterFrames(KATZ_SHAPE));
     makeCharacter(scene, 'salesman', SALESMAN, buildCharacterFrames(KATZ_SHAPE));
-    makeCharacter(scene, 'dale', DALE, buildCharacterFrames());
-    makeCharacter(scene, 'sunshine', SUNSHINE, buildCharacterFrames());
-    makeCharacter(scene, 'hazel', HAZEL, buildCharacterFrames(KATZ_SHAPE));
+    // People from the book (Milestone 11).
+    makeCharacter(scene, 'maryEllen', MARY_ELLEN, buildCharacterFrames(MARY_ELLEN_SHAPE));
+    makeCharacter(scene, 'hiker1', HIKER_1, buildCharacterFrames());
+    makeCharacter(scene, 'clerk', CLERK, buildCharacterFrames(KATZ_SHAPE));
+    makeCharacter(scene, 'daytripper', DAYTRIPPER, buildCharacterFrames());
+    makeCharacter(scene, 'driver', DRIVER, buildCharacterFrames());
     makeIcons(scene, 'icons');
     makeEffects(scene);
 }

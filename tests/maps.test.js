@@ -75,10 +75,12 @@ describe.each(Object.entries(MAPS))('map %s', (key, map) => {
     it('points npcs and triggers only at events that exist', () => {
         for (const npc of map.npcs ?? []) if (npc.talk) expect(EVENTS[npc.talk], npc.id).toBeDefined();
         for (const t of map.triggers ?? []) expect(EVENTS[t.event], t.event).toBeDefined();
+        for (const s of map.signs ?? []) if (s.event) expect(EVENTS[s.event], s.event).toBeDefined();
+        if (map.autoEvent) expect(EVENTS[map.autoEvent], map.autoEvent).toBeDefined();
         for (const g of map.gates ?? []) expect(EVENTS[g.opensAfter], g.id).toBeDefined();
     });
 
-    it('has gates exactly where the gate tiles (G, D, H) are', () => {
+    it('has gates exactly where the gate tiles (G, D, H, J) are', () => {
         const fromRows = [];
         map.rows.forEach((row, y) => [...row].forEach((ch, x) => { if (GATE_CHARS.includes(ch)) fromRows.push(`${x},${y}`); }));
         const fromGates = (map.gates ?? []).flatMap((g) => g.tiles.map(([x, y]) => `${x},${y}`));
@@ -118,7 +120,8 @@ describe.each(Object.entries(MAPS))('map %s', (key, map) => {
             const grid = parseMap(map);
             gates.slice(0, i).forEach((g) => openGate(grid, g));
             const seen = reachable(grid, grid.spawns.player, map.npcs ?? []);
-            const npc = (map.npcs ?? []).find((n) => n.talk === gate.opensAfter);
+            // The event starts by talking to an NPC, reading a sign (the payphone) or a step trigger.
+            const npc = (map.npcs ?? []).find((n) => n.talk === gate.opensAfter) ?? (map.signs ?? []).find((s) => s.event === gate.opensAfter);
             const trigger = (map.triggers ?? []).find((t) => t.event === gate.opensAfter);
             const spots = npc
                 ? Object.values(DIRS).map((d) => `${npc.x + d.x},${npc.y + d.y}`) // stand next to the NPC

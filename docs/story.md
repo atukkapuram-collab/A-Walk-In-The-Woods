@@ -2,197 +2,264 @@
 
 ## Story at a glance
 
-**Title:** *Trail Mix*, a game based on Bill Bryson's *A Walk in the Woods*. (The earlier working title was *White Blazes*, after the white paint blazes that mark the Appalachian Trail. Following them is still the whole game.)
+**Title:** *Trail Mix*, a game that follows the plot of Bill Bryson's *A Walk in the Woods* (1998). The earlier working title was *White Blazes*, after the white paint blazes that mark the Appalachian Trail; following them is still the whole game.
 
-**Premise:** You've spent twenty years at a desk. On a gray winter night, after reading one too many hiking blogs, you announce that you'll walk the entire Appalachian Trail, 2,190 miles from Georgia to Maine. Everyone you invite says no, except Stephen Katz, an old school friend you haven't talked to in years. He is out of shape, overconfident and very bad at camping. Together you set out to conquer the trail. The trail has other plans.
+**Premise:** After twenty years in England, Bill Bryson moves his family to Hanover, New Hampshire, and discovers that the Appalachian Trail runs past the edge of town. Pleased with himself, he announces he will walk all of it: 2,100-odd miles from Georgia to Maine. He buys a frightening amount of gear and reads far too many books about bear attacks. He invites everyone he knows. The only person who says yes is Stephen Katz, an old school friend from Des Moines: overweight, a recovering alcoholic, and wildly unprepared. The two of them set out to conquer the trail. The trail has other plans.
 
-**What it's about:** A funny, honest story about two ordinary people facing something much bigger than they expected, and what they learn about themselves and each other when things go wrong.
+**What it's about:** Two ordinary, middle-aged men take on something far bigger than they expected. The game follows the book's real route and its two halves:
+- **Part 1:** together from Georgia through the Smokies, then by rental car to Virginia.
+- **Part 2:** Bryson alone, then Katz's return for the Hundred-Mile Wilderness in Maine, where they finally stop.
 
-**Themes:** adversity, personal growth, friendship, expectations vs. reality, and the beauty and harshness of the wilderness.
+**Central theme (what the game argues):** *the trail humbles the plan.* Success isn't the 2,190 miles. It is the honest attempt, what you learn to notice and the person you walk with. Bryson and Katz walk about 870 miles, under 40% of the trail, and Bryson still concludes that they hiked the Appalachian Trail. A second thread runs through the book and the game: the wilderness itself is huge, fragile and often badly looked after, and it's worth paying attention to.
 
-**Tone:** dry, self-deprecating narration in the spirit of Bryson. Big moments of wonder at the scenery, and honesty about how hard it is. Katz supplies most of the comedy.
+**Other themes:** adversity, personal growth, friendship (and Katz's quiet struggle with addiction), expectations vs. reality, and humor as a way of coping.
 
-**Shape:** 3 acts · 4 trail settings · 8 decision events · 1 final choice · 4 endings · about 20–30 minutes to play.
+**Tone:** dry, self-deprecating first-person narration in Bryson's spirit. Big moments of wonder at the scenery, honesty about how hard it is, and short history and nature asides. Katz supplies most of the comedy.
+
+**Shape:**
+- Prologue and 4 acts (following the book's two parts)
+- 6 trail maps
+- 13 decision events
+- 1 final choice
+- 4 endings
+- A Trail Journal of 13 entries
+- About 20–25 minutes to play
+
+**Faithfulness rules:**
+- The plot, places, people and order of events follow the book. Where the game lets you choose differently from Bryson, the book's own choice is always one of the options. Endings other than Changed Route are "what ifs".
+- **Every line is new writing that paraphrases the book.** Direct quotations from the book are rare and under 15 words.
+- Facts marked **(verify)** need checking against the book before the line is final.
 
 ## Characters
 
-### You, the Hiker (player-named)
+### Bill Bryson (the player)
 
-A planner who has read every guidebook and believes preparation can solve anything. You narrate the game in a wry, slightly superior voice that softens as the trail humbles you.
-
-- **Starts as:** confident, impatient, focused on miles and the finish line.
-- **Grows into:** someone who notices the trail itself (the views, the people, the small wins) and measures success differently.
+The narrator, in first person. A well-read, comfortably out-of-shape travel writer who believes research and the right equipment will see him through. He is funny at everyone's expense, including his own.
+- **Starts as:** confident and anxious at once. He's focused on miles, gear and bears.
+- **Grows into:** someone who notices the woods themselves (the trees, the silence, the damage people have done) and measures success differently.
 
 ### Stephen Katz, the companion
 
-Your old friend. He arrives for a wilderness expedition wheeling a suitcase, eats the trail snacks in the first two days, and threatens to quit roughly once an hour. Under the jokes, he came because this was the one thing in years he said yes to, and he's afraid of failing at it.
+Bryson's school friend from Des Moines. He hasn't hiked, he's heavy, and he arrives with a bag full of Little Debbie snack cakes. He is a recovering alcoholic, sober for some years when the trip begins. He complains, throws away supplies to lighten his pack, and threatens to quit. He also keeps going, and he's braver and kinder than he first looks.
+- **Starts as:** the punchline.
+- **Grows into:** depending on your choices, a stubborn, loyal partner who comes back for Maine, or a friend who drifts away.
+- **Handling his drinking:** it's part of his story in the book, so it's part of his story here. It is treated honestly and kindly. It's never a joke and never a stat penalty.
 
-- **Starts as:** reluctant, complaining, the punchline.
-- **Grows into:** depending on your choices, either a stubborn, loyal partner who surprises you, or a friend who finally walks away.
-- **Sample lines:** *"Nature is just outside with extra steps."* · *"I'm not quitting. I'm resting aggressively."* · *"If I die out here, tell people it was a bear. Not the hill. The bear."*
+### People from the book
 
-### Side characters (original)
+- **The outfitter salesman** (Hanover). Delighted to sell Bryson everything. (verify name)
+- **Mary Ellen.** A loud, know-it-all hiker from Florida who attaches herself to the pair in Georgia. She is exhausting company, and they eventually slip away from her.
+- **Fellow hikers** at crowded shelters, snowbound in the Smokies.
+- **Day-trippers and Park Service visitors** on Skyline Drive in Shenandoah.
+- **Loggers / a driver on a logging road** in Maine. (verify details)
 
-- **Dale the Gear Guy:** an ultralight hiker who cuts the handle off his toothbrush to save weight. He shows up in each setting with advice that is half useful, half unbearable.
-- **Sunshine:** a cheerful young thru-hiker who passes you in Georgia and keeps reappearing, effortlessly ahead. She is everything you thought you'd be, and she ends up giving the best advice in the game.
-- **Hazel:** runs the diner and hostel in the trail town of Pine Gap, Virginia. Gruff, kind, and she has seen a thousand hikers quit and a thousand keep going.
+Bryson's wife appears only in narration. No portrait.
+
+**Cut from the earlier version:** Dale the Gear Guy, Sunshine, Hazel and the town of Pine Gap (all original characters), the Last Bottle event, and the raccoon running joke.
 
 ## Story stats
 
-Four stats track your choices (each 0–10), plus a mileage counter. They decide which ending you reach.
+The same four stats and ranges as before, plus a Miles counter.
 
 | Stat | What it means | Start | Danger zone |
 | --- | --- | --- | --- |
-| **Stamina** | Your bodies: blisters, exhaustion, injury | 6 | 0 means Early Departure |
-| **Supplies** | Food, water and gear | 6 | 0 means Early Departure |
-| **Bond** | How much you and Katz trust each other | 5 | 2 or less means Broken Partnership |
-| **Morale** | Your will to keep going | 6 | 2 or less pushes toward Early Departure |
-| **Miles** | Trail progress (a counter, not a 0–10 stat) | 0 | Skipping ahead is noted |
+| **Stamina** | Bodies: blisters, exhaustion, injury | 6 | 0 means Early Departure |
+| **Supplies** | Food, water, gear and money | 6 | 0 means Early Departure |
+| **Bond** | How much Bill and Katz trust each other | 5 | 2 or less means Broken Partnership |
+| **Morale** | The will to keep going | 6 | 2 or less means Early Departure |
+| **Miles** | Trail progress (a counter) | 0 | Compared with Bryson's ~870 on the ending card |
 
-Design rule: no choice is purely good. Every option helps one stat and costs another, just like the real trail.
+**Design rule:** no choice is purely good. Every option helps one thing and costs another.
 
-## Act I: The Beginning (Georgia, early spring)
+**While Katz is away (Act III):** Bond is frozen. It's shown as "Katz: home in Iowa" and only The Phone Call changes it.
 
-**Setting 1: North Georgia mountains.** Cold rain, bare trees, steep switchbacks. Beautiful in a damp, unfriendly way.
+## Prologue: Hanover, New Hampshire (Chapter 1, winter)
 
-**Opening.** A kitchen table covered in maps. You call everyone you know. Only Katz says yes, and he says it too fast. Two weeks later he steps off a plane in Atlanta wheeling a suitcase. *"What? It has wheels. Wheels are efficient."*
+**Opening panels:**
+1. Bryson moves to Hanover and finds the trail at the edge of town.
+2. Grand announcement.
+3. A stack of bear-attack books.
+4. Everyone he invites says no.
+5. Katz calls: he's in.
 
-### Event 1: The Outfitter (tutorial)
+**E1: The Outfitter (tutorial).** A salesman walks Bryson round the shop, and the pile of gear grows.
+- **Buy the whole list.** Supplies +2, Stamina −1. I am ready for anything, including a hernia.
+- **Buy only what the guidebook says you need.** Stamina +1, Supplies −1. Lighter, cheaper, and nagged by a feeling I've forgotten something.
+- **Leave room for whatever Katz brings.** Bond +1, Morale +1, Supplies −1. Katz will bring snack cakes. Katz will always bring snack cakes.
 
-A very enthusiastic salesman and Dale the Gear Guy both have opinions about your pack.
+## Act I: Georgia (Chapters 2–5, March)
 
-- **Buy everything the salesman suggests.** Supplies +2, Stamina −1. You're ready for anything, including a back injury.
-- **Pack ultralight like Dale.** Stamina +1, Supplies −1. You saw off your toothbrush handle and feel ridiculous.
-- **Let Katz choose.** Morale +1, Bond +1, Supplies −1. He buys 14 snack cakes and a hammock neither of you can set up.
+**Setting:** North Georgia. Amicalola Falls, the approach trail and Springer Mountain, the trail's southern end. Cold, bare trees, steep switchbacks.
 
-**First steps.** Under the trailhead sign, you feel like an explorer. Ten minutes later you're bent over, gasping, while Sunshine jogs past with a cheery "Morning!"
+**Atlanta.** Katz arrives: heavier than Bryson remembers, cheerfully unready, sober (he mentions it plainly). The first climb nearly kills them both.
 
-### Event 2: "I'm Going Home" (day two)
+**E2: Katz Lightens His Load** (Ch 2). Katz, furious with his pack, has flung a pile of food and gear into the woods.
+- **Climb down and fetch it.** Supplies +1, Stamina −2.
+- **Share your food with him.** Bond +2, Supplies −2.
+- **Laugh it off and keep walking.** Morale +1, Bond −1.
 
-On a muddy climb, Katz drops onto a log and announces the trip is over.
+**E3: Mary Ellen** (Ch 5). A hiker from Florida joins them uninvited. She is loud, has opinions about everything, and won't leave.
+- **Let her tag along.** Supplies +1, Morale −2. She does share her food.
+- **Slip away at dawn with Katz** (the book's choice). Bond +1, Stamina −1. A conspiracy of two, at a punishing pace.
+- **Tell her you'd rather hike alone.** Morale +1, Bond −1. Katz thinks you were harsh, and is secretly relieved.
 
-- **Push him.** "We said the whole trail." Miles +, Bond −1. He follows in silence, which is worse than complaining.
-- **Sit with him.** Share his last snack cake and slow the pace. Bond +2, Supplies −1, Miles slower.
-- **Make a joke.** "Fine, but home is back over all those hills." Morale +1. Katz laughs despite himself and stands up.
+**Act I close: the woods at night** (Ch 4, no choice). The silence, the dark and the stars. Bryson realizes the woods are not like anywhere else. The narration changes with Bond.
 
-**Act I close.** That night, wet and aching at a crowded shelter, you look up at more stars than you've seen in years. Katz, already asleep, snores like a chainsaw. For the first time, you aren't sure whether you're hiking the trail or the trail is hiking you.
+## Act II: The Smokies and Shenandoah (Chapters 6–11, spring)
 
-## Act II: The Middle (Smokies and Virginia)
+**Setting 1: Great Smoky Mountains.** High ridges, fog, sudden snow, and dying Fraser firs.
 
-**Setting 2: Great Smoky Mountains (late spring).** High ridges, fog, sudden snow, and signs warning about bears.
+**E4: Snowstorm** (Ch 6, verify where exactly). A spring snowstorm traps them at a crowded shelter.
+- **Wait it out in the shelter.** Stamina +1, Morale −1.
+- **Push on through the snow.** Miles +, Stamina −2.
+- **Get down to Gatlinburg early.** Supplies +1, Miles −.
 
-### Event 3: Whiteout
+**E5: Night Noises** (Ch 1 and 6). Something large moves outside the tent at night. Bryson has read every bear book there is. **They never find out what it was.**
+- **Get up and hang the food bag.** Stamina −1, Morale +1.
+- **Wake Katz.** Bond +1, Stamina −1. Katz grips his knife and the two of them lie awake together. (verify the knife)
+- **Lie still and listen.** Morale −2.
 
-A freak spring snowstorm rolls in. The shelter ahead is packed, and Dale is inside giving a lecture on sock layering.
+**E6: The Rental Car** (Ch 7–8). Gatlinburg: tourist tat and pancakes. Snow has closed the high trail, and the two of them have barely spoken in days. It's the book's big turn: skip ahead to Virginia. **Ending check after.**
+- **Rent a car and drive north to Virginia** (the book's choice). Morale +1, Supplies −1. Sets **skipped ahead**.
+- **Walk on through, whatever it takes.** Stamina −2, Bond −1.
+- **Take zero days in Gatlinburg.** Stamina +2, Supplies −1, Morale −1.
 
-- **Wait it out in the shelter.** Stamina +1, Morale −1. You survive the storm and the sock lecture, barely.
-- **Push on to the next shelter.** Miles +, Stamina −2. Brutal, but you feel tougher.
-- **Take a side trail down to a road and town.** Supplies +1, Miles −. Warm, dry, and the first hint that the plan can bend.
+**Setting 2: Shenandoah National Park, Virginia.** Gentle, green and tamed. Skyline Drive crosses the trail again and again. Day-trippers, waysides, and the Park Service's history.
 
-### Event 4: Night Visitor
+**E7: Skyline Drive** (Ch 10). The trail and the road keep meeting, and every crossing has a wayside with burgers.
+- **Hike every mile.** Stamina −1, Morale +1.
+- **Stop at every wayside.** Bond +1, Morale +1, Supplies −1. The budget goes on milkshakes.
+- **Hitch between waysides.** Stamina +1, Morale −1. It feels like cheating, because it is.
 
-Something snuffles outside the tent. Katz is certain it's a bear and that he's going to be famous for being eaten.
+**Midpoint: the campfire talk** (Ch 11, no choice; it reacts to Bond):
+- **Bond 5+:** Katz talks honestly about drinking, about getting sober and about why he said yes to this. Bryson tells him he's glad he came.
+- **Bond 4 or less:** Katz says he's looked up flights home.
 
-- **Get up and hang the food bag properly.** Stamina −1. Safe, sensible, freezing.
-- **Try Katz's plan: bang pots and yell.** Bond +1, Morale +1, Supplies −1. It was a raccoon. It took a bagel anyway.
-- **Ignore it and sleep.** Supplies −2. You wake to a crime scene of torn wrappers.
+**E8: Katz Goes Home** (Ch 11). Katz has to get back to Des Moines (verify the reason). Part 1 ends. **Ending check after.**
+- **Ask him to come back for the end.** Bond +1, Morale −1. Sets **invited**.
+- **Tell him you're glad he came.** Bond +2, Morale −2.
+- **Drop him at the airport and say little.** Morale +1, Bond −2.
 
-**Setting 3: Virginia (midsummer).** Long, green, hot ridges. Fewer dramatic dangers, more grinding sameness, and the trail town of Pine Gap.
+## Act III: Alone (Chapters 12–18, summer)
 
-### Event 5: Pine Gap
+**Home in Hanover** (no choice, fixed result card). Stamina +1, Supplies +2. A few weeks at home. Bryson recovers, restocks and feels the trail pulling at him. Katz is away from here until The Phone Call.
 
-Hazel's diner has pie, a hostel with real beds, and a pickup truck heading 100 miles north. Katz has ideas.
+**Setting 3: Pennsylvania and the Mid-Atlantic.** Endless rocks, heat, the Delaware Water Gap, and Centralia, the town with a fire burning under it.
 
-- **Take a zero day** (a rest day with no miles). Stamina +2, Morale +1, Miles −.
-- **Resupply and keep going.** Supplies +2, Morale −1.
-- **Ride ahead with Katz** to skip the "boring" part. Miles + (big), Morale +1, and the game marks that you skipped ahead.
-- **Let Katz ride ahead alone and meet up later.** Miles stays honest, Bond −2.
+**E9: Car Hiking** (Ch 12–14). Bryson walks day sections from his car, alone. It's easier, and it doesn't feel like the trail.
+- **Keep day-hiking from the car.** Supplies +1, Morale −2.
+- **Commit to a solo overnight section.** Stamina −1, Morale +2, Supplies −1.
+- **Drive over to see Centralia.** Morale −1. Unlocks the Centralia Journal entry.
 
-*Hazel, wiping the counter:* "Everybody thinks the trail is about the walking. It's about the quitting you don't do."
+**Setting 4: New England and the White Mountains.** Massachusetts, Vermont, then the Whites: above the treeline, cairns, and the worst weather in America.
 
-### Event 6: The Last Bottle
+**E10: Mount Washington** (Ch 16–17, verify). The weather turns on the mountain where so many have died.
+- **Go for the summit anyway.** Morale +2, Stamina −2.
+- **Turn back.** Stamina +1, Morale −1.
+- **Stay the night in a mountain hut.** Supplies −1, Stamina +1.
 
-A heatwave. The spring on your map is dry. You have one liter left between you, and Katz is slowing.
+**E11: The Phone Call** (Ch 18–19). Bryson calls Katz about walking the Hundred-Mile Wilderness together. Katz's reply depends on Bond and on whether he was *invited* at the airport. **Ending check after:** if Bond is 2 or less, Katz says no, which is Broken Partnership.
+- **"I miss having you out there."** Bond +2, Morale −1.
+- **"I'll sort out the gear and the flights."** Bond +1, Supplies −1.
+- **"Only if you feel like it."** Morale +1, Bond −1.
 
-- **Split it evenly.** Bond +2, Stamina −1.
-- **Ration it by the plan.** Supplies held, Bond −1. *"You sound like a gym teacher."*
-- **Gamble on a spring off-trail.** A coin flip: find cold water (Morale +2) or lose half a day (Stamina −1, Miles −).
+## Act IV: Maine (Chapters 19–21, late summer)
 
-### Midpoint scene: the campfire talk (no choice, but it reacts to Bond)
+**Setting 5: the Hundred-Mile Wilderness.** No towns and no roads, only logging tracks, lakes, roots and rivers. The most beautiful setting and the hardest.
 
-- **High Bond:** Katz admits he came because his life had stalled, and this was the first thing he'd committed to in years. He asks why *you* came, and for once you answer honestly.
-- **Low Bond:** Katz stares at the fire and says he's been checking bus schedules. The silence says the rest.
+**Reunion** (no choice). Katz arrives. The line changes with Bond. He admits things have been hard at home (verify the detail of his relapse). It's written with care.
 
-Sunshine passes your camp and shares one piece of advice: "Nobody walks the trail they planned. You walk the one that shows up."
-
-## Act III: The Climax (Maine, autumn)
-
-**Setting 4: The Hundred-Mile Wilderness.** The most remote stretch: no towns, no roads, red and gold leaves, icy lakes, and real isolation. The most beautiful setting and the hardest one.
-
-### Event 7: The River
-
-A rain-swollen river blocks the trail. The far bank is close enough to see and far enough to scare you.
-
-- **Ford it together, locking arms with Katz.** Bond +1, Stamina −1. If Stamina is already low, you also lose supplies to the current.
+**E12: The River** (Ch 20). A fast, cold river has to be forded.
+- **Ford it together, arms locked.** Bond +1, Stamina −1. If Stamina is 3 or less, you also lose Supplies −1 to the current.
 - **Camp and wait for the water to drop.** Supplies −2, Morale −1.
-- **Take the long detour upstream.** Stamina −1, Miles −.
+- **Take the long way upstream.** Stamina −1, Miles −.
 
-### Event 8: The Fall
+**E13: Katz Is Lost** (Ch 20–21). Katz falls behind and vanishes. Bryson spends a long night alone, calling for him. Katz turns up the next day on a logging road, having thrown away his water. **Ending check after.**
+- **Search off-trail at dusk.** Stamina −2, Bond +2.
+- **Wait at the agreed spot overnight.** Morale −2, Supplies −1.
+- **Hike out to a road for help.** Bond −1, Morale −1. Sets **left the wilderness**.
 
-On wet roots, Katz goes down hard and twists his ankle. He insists he's fine. He is not fine.
-
-- **Carry his pack as well as yours.** Stamina −2, Bond +2. *"This is the nicest thing anyone's done for me. Don't make it weird."*
-- **Go ahead alone to find help.** Miles +, Bond −1. Katz waits alone, and he remembers it.
-- **Walk him out to the nearest logging road.** Morale −1. Safe, and the end of the original plan.
-
-### The Final Crossroads
-
-The last campfire. On the horizon is the final mountain, the end of the trail. You can both feel it: how tired you are, how much food is left, and whether you still trust each other. One last choice:
-
-- **"Summit or nothing."** Go for the finish line.
-- **"Let's go home."** You've done enough.
-- **"Let's finish it our way."** Drop the original goal and make the most of what's left.
-
-The ending depends on this choice **and** your stats (see Endings).
+**The Final Crossroads** (Ch 21). On the logging road, with Katahdin still far off. A truck could take them out. Katz asks, "So what now?"
+- **"Summit or nothing."**
+- **"Let's go home."**
+- **"Let's finish it our way."**
 
 ## Endings
 
-The game checks the endings in this order, and the first one that fits wins. The checks run after Event 5, after Event 8, and at the Final Crossroads.
+Checks run after E6, E8, E11, E13 and at the Final Crossroads. They run in this order, and the first that fits wins:
 
 | # | Ending | When it happens |
 | --- | --- | --- |
-| 1 | **Broken Partnership** | Bond is 2 or less at any check |
-| 2 | **Early Departure** | Stamina or Supplies hits 0, Morale is 2 or less, or you choose "Let's go home" |
-| 3 | **Finished Trail** | You choose "Summit or nothing" with Stamina 5+, Supplies 3+, Bond 5+, and you never skipped ahead |
-| 4 | **Changed Route** | Everything else: you choose "Our way", or you try for the summit without the stats, or you skipped ahead |
+| 1 | **Broken Partnership** | Bond 2 or less at any check (at E11 this means Katz won't come to Maine) |
+| 2 | **Early Departure** | Stamina or Supplies at 0, Morale 2 or less, or "Let's go home" |
+| 3 | **Finished Trail** | "Summit or nothing" with Stamina 5+, Supplies 3+, Bond 5+, and neither flag set |
+| 4 | **Changed Route** | Everything else at the Final Crossroads |
+
+### Changed Route: *the book's ending*
+
+They walk out of the woods on the logging road and stop. Bryson adds it up: about 870 miles, 39.5 percent of the trail. He realizes it doesn't matter. They learned the woods, they learned what they could do, and they did it together. *"We hiked the Appalachian Trail,"* he tells Katz, and he means it. The card is tagged **"The book's ending."**
+
+*Lesson: the trail humbles the plan; the honest attempt is the success.*
+
+### Finished Trail: *what if*
+
+Without the skip and without leaving the woods, they reach Katahdin's summit sign at sunrise. Katz is silent for once. Bryson knows that this is the version the book doesn't have, and that the walk mattered more than the sign.
+
+*Lesson: preparation, care for each other and stubbornness can carry you all the way.*
 
 ### Broken Partnership
 
-After one argument too many, Katz buys a bus ticket at the next road crossing. You keep walking alone for a day and discover that the trail is very quiet without someone complaining about it. You go home too. Weeks later, a postcard arrives from Katz with a drawing of a raccoon holding a bagel. Maybe there's something left to fix. *Lesson: no goal is worth more than the people you take with you.*
+Katz doesn't come to Maine, or he takes the truck out alone. Bryson finds the woods very quiet without him. Weeks later a package arrives from Des Moines: one Little Debbie, no note. Maybe there's something left to fix.
+
+*Lesson: no goal is worth more than the person you take with you.*
 
 ### Early Departure
 
-Your bodies or your supplies give out. At a motel near a trailhead, you spread out the map and look at how much is left. Katz points at how much is behind you instead. *"We walked from there to here. On purpose. Who does that?"* *Lesson: stopping isn't the same as failing; the trail was harder than your plans.*
+Bodies, food or will give out. At a motel, a map on the bed. Bryson looks at what's left; Katz points at what's behind them.
 
-### Finished Trail
+*Lesson: stopping is not the same as failing.*
 
-You reach the summit at sunrise, legs shaking, above a sea of clouds. Katz complains the whole way up, then falls silent at the top. You take one photo, and neither of you can say anything for a while. Sunshine is already there, cheering. *Lesson: preparation, care for each other and stubbornness can carry you through.*
+**Every ending card shows:**
+- "Bryson & Katz: about 870 miles of 2,190. You: N."
+- Bond rating: Strangers, Hiking Buddies or Trail Family.
+- A final Katz line.
+- Journal entries found, out of 13.
 
-### Changed Route (the "true" ending)
+## The Trail Journal
 
-You don't finish the trail as planned. Instead you choose the stretches that meant something, walk them at your own pace, and end on a quiet lakeshore watching the leaves fall. It isn't the trip you planned. It's better. *"So we didn't hike the whole thing,"* Katz says. *"We hiked our thing."* *Lesson: growth comes from changing your goals when reality changes, not from forcing the original plan.* This ending is closest in spirit to the book.
+Bryson's history and nature asides are a big part of the book. In the game they become **13 short Journal entries**. Each is two or three sentences, paraphrased, with a chapter tag. They unlock from signs, overlooks and some choices, and you read them from the pause menu.
 
-**Every ending screen shows:** total miles, a Bond rating ("Strangers", "Hiking Buddies" or "Trail Family"), and one last Katz line that matches your journey.
+1. White blazes and the trail's length (Ch 1)
+2. Bear attacks, and why Bryson worried (Ch 1)
+3. Benton MacKaye's idea for the trail (Ch 3)
+4. Myron Avery, who built it (Ch 3)
+5. The Fraser firs dying in the Smokies (Ch 6)
+6. Gatlinburg (Ch 7)
+7. Earl Shaffer, the first thru-hiker, 1948 (Ch 9)
+8. Asher Durand and the forest America lost (Ch 10)
+9. The chestnut blight (verify chapter)
+10. Shenandoah's displaced mountain families (verify chapter)
+11. Centralia's underground fire (verify chapter)
+12. Mount Washington's weather (verify chapter)
+13. The Hundred-Mile Wilderness (Ch 19)
 
 ## Story arcs and essay themes
 
-These are the arcs the story is built around, and how each one shows the essay's ideas through play.
+- **The trail humbles the plan (central theme).** Act I is gear, mileage and fear. The book's own choices (skipping ahead, car hiking, walking out in Maine) are always on the menu. The ending card compares your miles with theirs. Changed Route, the book's ending, is the most common outcome.
+- **Responding to adversity:** snow, cold rivers, fear, loneliness and a lost friend. The player responds, and the stats show the cost.
+- **Personal growth: the narrator's voice changes.**
+  - Act I: plans and fear.
+  - Act II: starts noticing the woods.
+  - Act III: alone, thinking about what the trail is for.
+  - Act IV: honest and reflective.
+- **Katz's arc:** from punchline to partner. He comes back for Maine, and the player decides how much he's trusted.
+- **Noticing the wilderness:** the Journal rewards attention, and it carries Bryson's environmental argument (the dying trees, the lost chestnuts, Centralia, the Park Service).
+- **Humor as a way of coping:** the bear panic, the snack cakes, Mary Ellen.
+- **Multiple perspectives on success:** four endings, one of them the book's own.
 
-- **Responding to adversity (the core essay question):** every event is a hardship (rain, snow, heat, rivers, injury), and the player must respond to it rather than read about it. The stats make the cost of each response visible.
-- **Personal growth: the narrator's voice changes.** In Act I, narration is about plans, gear and miles. By Act II it starts noticing the scenery and the people. In Act III it's reflective and honest. The player hears the character change.
-- **Katz's arc: from punchline to partner.** His growth (or his leaving) depends on how the player treats him. That makes the relationship something the player builds or breaks, not just analyzes.
-- **Expectations vs. reality:** the whole story is about the gap between the plan at the kitchen table and the trail that shows up. Sunshine's and Hazel's lines state it, and the Changed Route ending resolves it.
-- **Humor as a way of coping:** like Bryson, the jokes come hardest when things are worst, as with the bear panic, the snack cakes and the ankle.
-- **Multiple perspectives on success:** each ending redefines what success means, so different players finish with different interpretations instead of one fixed reading.
-
-**Scope check against the planning doc:** 1 player character and 1 companion ✓ · 4 settings ✓ · 8 decision events ✓ · simple resource management (4 stats) ✓ · 4 endings ✓.
+**Scope check against the planning doc:**
+- 1 player character and 1 companion ✓
+- 6 settings (minimum 3–4) ✓
+- 13 decision events (minimum 5–8) ✓
+- 4 stats ✓
+- 4 endings ✓

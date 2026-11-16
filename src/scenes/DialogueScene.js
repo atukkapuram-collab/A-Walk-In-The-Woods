@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config.js';
 import { SPEAKERS } from '../data/speakers.js';
+import { JOURNAL_BY_ID } from '../data/journal.js';
 import { textCps } from '../state/settings.js';
 import { audio } from '../systems/Audio.js';
 import { resolveEffects, STATS } from '../state/GameState.js';
@@ -39,11 +40,14 @@ export class DialogueScene extends Scene {
 
     // onResult(outcome) runs when the result card appears: that is the moment
     // stats change (design blueprint), so the HUD flashes along with the card.
-    play(event, onFinish, { state = {}, onResult = null } = {}) {
+    // onJournal(id) unlocks a Journal entry and returns true if it is new on
+    // this walk; only then does a box announce it.
+    play(event, onFinish, { state = {}, onResult = null, onJournal = null } = {}) {
         this.runner = new EventRunner(event, { state });
         this.cps = textCps(); // the player's text speed setting (slow, normal, instant)
         this.onFinish = onFinish;
         this.onResult = onResult;
+        this.onJournal = onJournal;
         this.resultApplied = false;
         this.dim.setVisible(true);
         this.controls.flush();
@@ -80,6 +84,15 @@ export class DialogueScene extends Scene {
                 this.onResult?.({ effects: step.effects, flags: step.flags });
                 this.statSound(step.effects);
                 break;
+            case 'journal': {
+                const entry = JOURNAL_BY_ID[step.id];
+                if (!entry) throw new Error(`Unknown Journal entry "${step.id}".`);
+                if (!this.onJournal?.(step.id)) return this.advance();
+                audio.sfx('statUp');
+                this.box.show(`New in the Journal: "${entry.title}". Read it from the pause menu (Esc).`, null, this.cps, 'narrator');
+                this.mode = 'text';
+                break;
+            }
             case 'end':
                 this.finish(step.outcome);
                 break;
@@ -111,6 +124,7 @@ export class DialogueScene extends Scene {
         const done = this.onFinish;
         this.onFinish = null;
         this.onResult = null;
+        this.onJournal = null;
         done?.(outcome);
     }
 

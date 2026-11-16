@@ -6,8 +6,10 @@ import { DIRS } from './GridMover.js';
 //   triggers: [{ event: eventId, x, y, w, h }]                  step triggers (a rectangle of tiles)
 //   gates:    [{ id, opensAfter: eventId, tiles: [[x, y], ...] }]
 //   exit:     { x, y, w, h }   stepping in leaves the map
-//   signs:    [{ x, y, text }]  face and press Space
-//   overlook: { x, y, text }    face and press Space: Morale +1, once per map
+//   signs:    [{ x, y, text, journal?, event? }]  face and press Space. With `event`
+//             (the payphone), reading it starts that event until it has happened.
+//   overlook: { x, y, text, journal? }    face and press Space: Morale +1, once per map
+//   (journal: a Journal entry id from src/data/journal.js that the sign unlocks)
 
 // The tile in front of a character.
 export function facedTile(mover) {
@@ -41,9 +43,10 @@ export function talkTarget(map, player, done) {
         return npc.talk && !done.has(npc.talk) ? { kind: 'event', event: npc.talk, npc } : { kind: 'none', npc };
     }
     const sign = (map.signs ?? []).find((s) => s.x === tile.x && s.y === tile.y);
-    if (sign) return { kind: 'sign', text: sign.text };
+    if (sign?.event && !done.has(sign.event)) return { kind: 'event', event: sign.event };
+    if (sign) return { kind: 'sign', text: sign.text, journal: sign.journal ?? null };
     const o = map.overlook;
-    if (o && o.x === tile.x && o.y === tile.y) return { kind: 'overlook', text: o.text };
+    if (o && o.x === tile.x && o.y === tile.y) return { kind: 'overlook', text: o.text, journal: o.journal ?? null };
     return { kind: 'katz' };
 }
 

@@ -2,13 +2,18 @@ import { describe, it, expect } from 'vitest';
 import { JOURNEY, DETOURS } from '../src/data/journey.js';
 import { MAPS } from '../src/data/maps/index.js';
 import { EVENTS } from '../src/data/events/index.js';
+import { OPENING_PANELS } from '../src/data/opening.js';
 import { stepIndexForMap, detourFor, sceneForStep } from '../src/systems/Journey.js';
 
 describe('the journey', () => {
     const maps = JOURNEY.filter((s) => s.type === 'map').map((s) => s.map);
 
-    it('visits the four maps in the blueprint order', () => {
-        expect(maps).toEqual(['georgia', 'smokies', 'virginia', 'maine']);
+    it('visits the six maps in the book\'s order', () => {
+        expect(maps).toEqual(['georgia', 'smokies', 'shenandoah', 'pennsylvania', 'newengland', 'maine']);
+    });
+
+    it('marks the Act III maps as walked alone (Katz is home in Iowa)', () => {
+        expect(JOURNEY.filter((s) => s.katzAway).map((s) => s.map)).toEqual(['pennsylvania', 'newengland']);
     });
 
     it('has one travel screen with miles between each pair of maps', () => {
@@ -20,9 +25,17 @@ describe('the journey', () => {
         }
     });
 
-    it('has the three act cards, in order', () => {
-        expect(JOURNEY.filter((s) => s.type === 'act').map((s) => s.title))
-            .toEqual(['Act I: The Beginning', 'Act II: The Middle', 'Act III: The Climax']);
+    it('has the Prologue and four act cards, in order, each naming its book chapters', () => {
+        const acts = JOURNEY.filter((s) => s.type === 'act');
+        expect(acts.map((s) => s.title)).toEqual([
+            'Prologue: Hanover', 'Act I: Georgia', 'Act II: The Smokies and Shenandoah', 'Act III: Alone', 'Act IV: Maine'
+        ]);
+        for (const a of acts) expect(a.subtitle, a.title).toMatch(/^Chapters? \d+(–\d+)? · /);
+        // Each act card comes right before its first map (the Prologue before the opening).
+        expect(JOURNEY[JOURNEY.indexOf(acts[0]) + 1].type).toBe('opening');
+        for (const [title, map] of [['Act I: Georgia', 'georgia'], ['Act II: The Smokies and Shenandoah', 'smokies'], ['Act III: Alone', 'pennsylvania'], ['Act IV: Maine', 'maine']]) {
+            expect(JOURNEY[JOURNEY.findIndex((s) => s.title === title) + 1], title).toEqual(expect.objectContaining({ type: 'map', map }));
+        }
     });
 
     it('gives every map but the last an exit, and ends Maine with the Final Crossroads', () => {
@@ -35,10 +48,10 @@ describe('the journey', () => {
         for (const step of JOURNEY) expect(sceneForStep(step)[0]).toBeTruthy();
     });
 
-    it('takes the roadside detour only after Event 8 with "left the wilderness" set', () => {
-        expect(detourFor('maine', 'event8_fall', { leftWilderness: true })).toBe('roadside');
-        expect(detourFor('maine', 'event8_fall', { leftWilderness: false })).toBe(null);
-        expect(detourFor('maine', 'event7_river', { leftWilderness: true })).toBe(null);
+    it('takes the roadside detour only after E13 with "left the wilderness" set', () => {
+        expect(detourFor('maine', 'e13_katz_is_lost', { leftWilderness: true })).toBe('roadside');
+        expect(detourFor('maine', 'e13_katz_is_lost', { leftWilderness: false })).toBe(null);
+        expect(detourFor('maine', 'e12_river', { leftWilderness: true })).toBe(null);
         for (const d of DETOURS) {
             expect(MAPS[d.goTo]).toBeDefined();
             expect(EVENTS[d.afterEvent]).toBeDefined();
@@ -46,9 +59,11 @@ describe('the journey', () => {
         expect(MAPS.roadside.autoEvent).toBe('final_crossroads');
     });
 
-    it('places every event on a map exactly once (the Final Crossroads twice: Maine and the roadside)', () => {
+    it('places every event exactly once, on a map or in the opening (the Final Crossroads twice: Maine and the roadside)', () => {
         const counts = {};
         const add = (id) => { counts[id] = (counts[id] ?? 0) + 1; };
+        OPENING_PANELS.filter((p) => p.event).forEach((p) => add(p.event));
+        for (const m of Object.values(MAPS)) (m.signs ?? []).filter((s) => s.event).forEach((s) => add(s.event));
         for (const m of Object.values(MAPS)) {
             new Set((m.npcs ?? []).filter((n) => n.talk).map((n) => n.talk)).forEach(add);
             (m.triggers ?? []).forEach((t) => add(t.event));

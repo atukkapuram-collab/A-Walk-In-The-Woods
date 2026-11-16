@@ -36,7 +36,10 @@ export const SPRING = {
     fireCore: '#ffe37a',
     road: '#7f776c',
     roadLight: '#9a9184',
-    signBoard: '#a77a46'
+    signBoard: '#a77a46',
+    scree: '#9d9f94',
+    screeLight: '#b9bbb0',
+    screeDark: '#7c7e74'
 };
 
 // Great Smoky Mountains, late spring: fog, cooler blue-greens, snow patches.
@@ -85,7 +88,24 @@ export const AUTUMN = {
     waterDark: '#24476b'
 };
 
-export const SEASONS = { spring: SPRING, smokies: SMOKIES, summer: SUMMER, autumn: AUTUMN };
+// The White Mountains, late summer: thin, wind-beaten greens and grey stone.
+export const ALPINE = {
+    ...SPRING,
+    grass: '#6f8a5e',
+    grassLight: '#89a475',
+    grassDark: '#587049',
+    dirt: '#a39680',
+    dirtLight: '#bbae98',
+    dirtDark: '#857963',
+    canopy: '#2e5140',
+    canopyLight: '#3f6852',
+    canopyDark: '#213d30',
+    rock: '#93969a',
+    rockLight: '#bfc2c5',
+    rockDark: '#63666a'
+};
+
+export const SEASONS = { spring: SPRING, smokies: SMOKIES, summer: SUMMER, autumn: AUTUMN, alpine: ALPINE };
 
 // Character palettes. Each letter is used in the pixel matrices in sprites.js.
 // '.' is always transparent.
@@ -117,43 +137,71 @@ export const SALESMAN = {
     k: '#2b2b30'
 };
 
-export const DALE = {
-    h: '#2fa39a', // bright synthetic hat
-    b: '#227a73',
-    r: '#5a3b22',
+// People from the book (Milestone 11). Placeholder looks on the shared
+// shapes; Milestone 14 can give them their own.
+export const MARY_ELLEN = {
+    h: '#d2463c', // red bandana
+    b: '#a8342c',
+    r: '#e2c27a', // fair hair
     s: '#e0b48c',
     e: '#2b2118',
-    c: '#b6d43c', // neon ultralight shirt
-    d: '#8aa52a',
-    p: '#9aa0a6', // tiny grey pack
-    n: '#5b6470',
-    k: '#2b2b30'
+    c: '#4fb3c8', // turquoise shirt
+    d: '#3a8a9c',
+    p: '#f0b43c', // bright yellow pack
+    n: '#6b5a8a',
+    k: '#f4f1e8'  // white sneakers
 };
 
-export const SUNSHINE = {
-    h: '#f2b134', // sun-yellow cap
-    b: '#d08f1c',
-    r: '#c9792e',
-    s: '#e0b48c',
-    e: '#2b2118',
-    c: '#f5d34a', // bright running shirt
-    d: '#c9a830',
-    p: '#e86f5a', // small pack
-    n: '#3f6f9f',
-    k: '#f4f1e8'
-};
-
-export const HAZEL = {
-    h: '#c8c4bc',
-    b: '#c8c4bc',
-    r: '#c8c4bc', // grey hair, no hat (uses Katz's shape)
+export const HIKER_1 = {
+    h: '#5b6f3a', // olive watch cap
+    b: '#46562c',
+    r: '#3b2a1e',
     s: '#d9a982',
     e: '#2b2118',
-    c: '#6f8fae', // diner dress
-    d: '#526d8a',
-    p: '#efe8d8', // apron
-    n: '#4c5560',
+    c: '#7d4f8a', // purple fleece
+    d: '#5f3a6a',
+    p: '#4f5f6f',
+    n: '#3d3d46',
     k: '#2b2b30'
+};
+
+export const CLERK = {
+    h: '#2b2b30',
+    b: '#2b2b30',
+    r: '#2b2b30', // dark hair, no hat (uses Katz's shape)
+    s: '#c98e66',
+    e: '#2b2118',
+    c: '#e8e2d2', // white uniform shirt
+    d: '#b9b2a2',
+    p: '#c0392b', // red name badge
+    n: '#2f3b52',
+    k: '#2b2b30'
+};
+
+export const DRIVER = {
+    h: '#c0392b', // red cap
+    b: '#96281b',
+    r: '#5a5a5a',
+    s: '#d9a982',
+    e: '#2b2118',
+    c: '#3d6b3a', // checked work shirt
+    d: '#2c4f2a',
+    p: '#3d6b3a', // no pack
+    n: '#4a4f5a',
+    k: '#3b2a1e'
+};
+
+export const DAYTRIPPER = {
+    h: '#f4f1e8', // white sun visor
+    b: '#d8d2c2',
+    r: '#a86a3a',
+    s: '#e0b48c',
+    e: '#2b2118',
+    c: '#e86fa0', // pink holiday shirt
+    d: '#c0507e',
+    p: '#e86fa0', // no pack
+    n: '#f0e2b8', // shorts
+    k: '#f4f1e8'
 };
 
 export const KATZ = {

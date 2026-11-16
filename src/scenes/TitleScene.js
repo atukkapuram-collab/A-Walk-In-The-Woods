@@ -2,6 +2,7 @@ import { Scene } from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config.js';
 import { gameState } from '../state/GameState.js';
 import { loadSave } from '../state/persistence.js';
+import { JOURNAL_TOTAL } from '../data/journal.js';
 import { DEBUG, applyDebugStart } from '../systems/Debug.js';
 import { startJourney } from '../systems/Journey.js';
 import { fadeIn, openOverlay } from '../systems/Transitions.js';
@@ -13,7 +14,7 @@ import { UI, textStyle, drawPanel } from '../ui/theme.js';
 let debugAutoStarted = false;
 
 // Title screen (design blueprint, All screens): a pixel trail scene,
-// "Trail Mix", and Start, Settings and Quit. A browser tab can't close
+// "Trail Mix", and Start, Settings, Credits and Quit. A browser tab can't close
 // itself, so Quit shows a short goodbye card instead.
 export class TitleScene extends Scene {
     constructor() {
@@ -40,8 +41,8 @@ export class TitleScene extends Scene {
         this.add.text(cx + 4, 64, 'Trail Mix', textStyle(72, { color: '#1b1610' })).setOrigin(0.5);
         this.add.text(cx, 60, 'Trail Mix', textStyle(72, { color: '#f4e9cf' })).setOrigin(0.5);
         this.add.text(cx, 116, 'Georgia to Maine. 2,190 miles. Two friends.', textStyle(18, { color: '#f4e9cf', fontStyle: 'italic' })).setOrigin(0.5);
-        // Credit to the source book (an original game inspired by it, not a retelling).
-        this.add.text(cx, 146, 'Inspired by the book A Walk in the Woods by Bill Bryson', textStyle(15, { color: '#e8dfca', stroke: '#1b1610', strokeThickness: 4 })).setOrigin(0.5);
+        // Credit to the source book: since Milestones 9-13 the game follows its story.
+        this.add.text(cx, 146, 'Based on the book A Walk in the Woods by Bill Bryson', textStyle(15, { color: '#e8dfca', stroke: '#1b1610', strokeThickness: 4 })).setOrigin(0.5);
 
         this.controls = new Controls(this);
         this.menu = new Menu(this, {
@@ -49,12 +50,13 @@ export class TitleScene extends Scene {
             items: [
                 { label: 'Start', onSelect: () => this.startRun() },
                 { label: 'Settings', onSelect: () => openOverlay(this, 'Settings') },
+                { label: 'Credits', onSelect: () => openOverlay(this, 'Credits') },
                 { label: 'Quit', onSelect: () => this.showGoodbye() }
             ]
         });
 
-        const found = loadSave().endingsFound.length;
-        const note = `Endings found: ${found} of 4${DEBUG.enabled ? '  ·  DEBUG MODE (F2 on the trail)' : ''}`;
+        const save = loadSave();
+        const note = `Endings found: ${save.endingsFound.length} of 4  ·  Journal: ${save.journalFound.length} of ${JOURNAL_TOTAL}${DEBUG.enabled ? '  ·  DEBUG MODE (F2 on the trail)' : ''}`;
         this.add.text(cx, GAME_HEIGHT - 28, note, textStyle(15, { color: '#f4e9cf' })).setOrigin(0.5);
     }
 

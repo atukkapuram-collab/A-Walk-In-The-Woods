@@ -318,6 +318,118 @@ The playable prototype: one trail map, four-direction grid movement, grid collis
 4. **Skills:** `game-jam` (bug-fix freeze, ship buffer), `narrative-design` (validation pass on themes).
 5. **Test:** a playtest checklist: reach each of the four endings; check that each early ending can trigger after Event 5 and after Event 8; a full run takes about 20–30 minutes; someone who hasn't seen the game finishes it without help.
 
+## 5b. Expansion: follow the book (Milestones 9–14, approved 11/9/2026)
+
+**Why:** the owner asked for the game to follow the plot of *A Walk in the Woods* (the class reads chapters 1–21), carry its central theme ("the trail humbles the plan"), and be polished.
+
+**Decisions:**
+- The book's cast, with the player as Bill Bryson in first person.
+- The whole book, both halves.
+- A Trail Journal for Bryson's history and nature asides.
+- Four endings, with Changed Route tagged "the book's ending".
+
+The rewritten story, outline and blueprint are the source of truth. **Same workflow:** one milestone at a time, a branch each, and a stop for review after each.
+
+**Proposed stat effects (checked by brute force over every choice path, 11/9):** every ending is reachable at every check it belongs to.
+- **Early Departure** can now trigger at the first check (after E6), which settles question 5.
+- **Shares of all paths:**
+
+  | Ending | Share |
+  | --- | --- |
+  | Changed Route | 55% |
+  | Early Departure | 42% in all (29% from "Let's go home", 13% at the mid-trip checks) |
+  | Finished Trail | 2% |
+  | Broken Partnership | under 1% |
+
+The M10/M11 balance test confirms these with the real data.
+
+### Milestone 9: Book-accurate story docs (no code)
+
+1. **Build:**
+   - Rewrite `docs/story.md`, `docs/scene-outline.md` and `docs/design-blueprint.md` around the book: 23 scenes, 13 events, 6 maps, the Journal, the new flags and the new ending checks.
+   - Mark book facts to check with **(verify)**.
+2. **Files:** the three docs, this plan, `docs/handoff.md`, `CLAUDE.md`.
+3. **Test:** the owner reads the docs, checks every **(verify)** against the book, and approves or edits.
+
+### Milestone 10: Engine changes
+
+1. **Build:**
+   - **The player is Bill:** remove name entry (`NameEntry.js`, `OpeningScene.js`, `src/data/opening.js`) and bump the save version (`src/state/persistence.js`).
+   - **Flags:** `katzAway` and `invited` in `GameState.js`. Bond doesn't change while Katz is away, except in E11.
+   - **Katz-away mode:**
+     - no Katz follower (`Follower.js`, `TrailScene.js`);
+     - the HUD greys the Bond bar and labels it "Katz: home in Iowa" (`HUDScene.js`).
+   - **Fixed result cards** for scenes with no choice (Home in Hanover).
+   - **Ending checks** after E6, E8, E11 and E13. The rules in `src/state/endings.js` are reused unchanged.
+   - **Journal:**
+     - `src/data/journal.js` (13 entries; placeholder text until M11–M13);
+     - unlocks from `signs`, `overlook` and choice `after` steps;
+     - `src/scenes/JournalScene.js`, opened from `PauseScene.js`;
+     - the count on the HUD.
+   - **Journey:** `src/data/journey.js` gets 6 maps, the Prologue and Acts I–IV cards (with chapter subtitles), and the `carIfSkipped` travel step. Placeholder maps are fine until their content milestone.
+   - **Debug starts** for every map.
+2. **Test:**
+   - Unit tests for Katz-away (Bond frozen, the E11 exception), Journal unlocks, fixed result cards and the new check points.
+   - A walk through all 6 maps in debug mode.
+   - `npm test` passes.
+
+### Milestone 11: Part 1 content (Prologue, Georgia, Smokies/Gatlinburg, Shenandoah)
+
+1. **Build:**
+   - **Events:** `src/data/events/act1.js` (E1–E3, Act I close) and `act2.js` (E4–E8, midpoint).
+   - **Maps:** rework `georgia` and `smokies` (add Gatlinburg and the rental counter). Rename `virginia` to `shenandoah` and rework it.
+   - **Speakers:** bill, katz, maryEllen, salesman, hikers. Remove dale, sunshine and hazel.
+   - **Journal:** entries 1–10 written.
+   - Regenerate `docs/story-review.md`.
+2. **Test:**
+   - Play Part 1 from the title.
+   - Every option of every event appears, and its result card shows the outline's numbers.
+   - The midpoint's two Bond versions.
+   - The early ending after E6 and after E8.
+   - No text overflows.
+
+### Milestone 12: Part 2, Alone (Pennsylvania, New England)
+
+1. **Build:**
+   - **Maps:** `src/data/maps/pennsylvania.js` and `newengland.js`, registered in `maps/index.js`.
+   - **Tiles** (`legend.js`, `src/art/tiles.js`): boulders, cracked road and smoke vents, cairns and alpine rock.
+   - **Palettes:** summer and alpine.
+   - **Events:** `src/data/events/act3.js` (Home in Hanover, E9–E11).
+   - **Journal:** entries 11–12.
+2. **Test:**
+   - Katz-away mode across both maps.
+   - Each E11 reply variant (Bond bands × invited).
+   - The E11 refusal leads to Broken Partnership.
+   - The map tests pass.
+
+### Milestone 13: Maine and the endings
+
+1. **Build:**
+   - **Events:** `src/data/events/act4.js` (Reunion, E12, E13, the Final Crossroads).
+   - **Maps:** rework `maine` and `roadside`.
+   - **Endings:** rewrite `src/data/endings.js` (the four endings, the book-ending tag, the miles comparison, the Journal count). Update `EndingScene.js` and `EndingsFoundScene.js`.
+   - **Journal:** entry 13; all entries final.
+2. **Test:**
+   - All four endings from the title without debug mode.
+   - Finished Trail is never reached with a flag set.
+   - The ending card shows the comparison and the counts.
+
+### Milestone 14: Polish and playtest
+
+1. **Build:**
+   - **Travel screen:** a trail-map strip with a moving marker and dashed skipped sections (`TravelScene.js`, `TravelPath.js`).
+   - **Sprites:** Bill, Mary Ellen and hikers. Idle-walking NPCs.
+   - **Music:** variations for the new maps (Web Audio only).
+   - **Credits screen.**
+   - **Balance test:** update `tests/balance.test.js` for 13 events.
+   - **Docs:** `README.md`, `CLAUDE.md`, `docs/handoff.md`.
+2. **Test:**
+   - Every ending reachable at its checks.
+   - A timed run of 20–25 minutes.
+   - The built `dist/` plays with no console errors and no outside requests.
+   - A person who hasn't seen the game finishes it.
+   - Deploy only with the owner's go-ahead.
+
 ## 6. Time budget (due 11/17/2026)
 
 The plan is not divided into days. The hour estimates on each milestone add up to the blueprint's 10 hours. Following `game-jam`, keep the last ~20% of the remaining time before the deadline for Milestone 8 (playtest and hand-in), and use the cut list below if a milestone runs long.
@@ -334,6 +446,20 @@ The plan is not divided into days. The hour estimates on each milestone add up t
 | M7 Polish | optional, only if time remains |
 | M8 Playtest and hand-in | 1 h |
 
+**The expansion (11/9–11/17):**
+
+| Day | Milestone |
+| --- | --- |
+| 1 | M9 docs |
+| 2 | M10 engine |
+| 3–4 | M11 Part 1 |
+| 5 | M12 Part 2 |
+| 6 | M13 Maine and endings |
+| 7 | M14 polish and playtest |
+| 8 | Buffer |
+
+Use the scene outline's cut list if a day runs over.
+
 ## 7. If we fall behind
 
 Cut in the blueprint's order: scenic overlooks → the Endings Found screen → the travel-screen animation (use a plain text card) → the outline's story cut list (Dale's river cameo, the Event 6 coin flip, the Bond narration variants, merging Events 3 and 4). Weather and Milestone 7 go before any of those.
@@ -347,5 +473,5 @@ Decided on 11/7/2026: **JavaScript** (not TypeScript), and **the Phaser version 
 1. Tuning values for "Miles +", "Miles −", "slower pace" and "big", and the miles each map adds. Proposed starting values are in section 3; the docs leave them open and say miles never decide an ending.
 2. **Decided 11/8/2026: GitHub Pages** (built and published by `.github/workflows/deploy.yml`). Originally: how will the game be handed in (a zip of the built files, itch.io or GitHub Pages)? This only matters for Milestone 8.
 3. **Walking time between events (found in Milestone 4).** The blueprint asks for maps "about 3–4 screens long" and "about 1–2 minutes of walking between events". At the 200 ms step, the four maps (3–4 screens each) give 0.4–10 seconds of direct walking between events and 8–18 seconds per map; 1 minute would need about 300 tiles of path. Options: keep the maps as they are (reading, side nooks, signs and overlooks add time), make the maps longer, or slow the step. Needs the owner's decision; nothing was changed.
-4. **Run length (found in Milestone 8).** A full run takes about 11-12 minutes for a person (78 boxes and about 1,260 words of reading, 9 choices, 1.5 minutes of walking, cards and screens, plus about a minute of optional signs, overlooks and Katz chats), against the docs' 20-30 minutes. Walking is only 1.5 minutes, so slowing the step can't close the gap. Options: count replays toward the 20-30 minutes (four endings to find), lengthen the maps toward the blueprint's 1-2 minutes between events (question 3), or accept a shorter game. Needs the owner's decision; nothing was changed.
-5. **Early Departure after Event 5 (found in Milestone 8).** With the outline's numbers, the ending check after Event 5 can never give Early Departure: the worst case by then is Stamina 2, Supplies 2, Morale 4 (it needs a 0, or Morale 2 or less). Broken Partnership can trigger there, and both early endings can trigger after Event 8. `tests/balance.test.js` checks every choice path. Changing it would mean changing the outline's numbers (for example, lower starting stats or a bigger cost in Events 3-5), so it needs the owner's decision; nothing was changed.
+4. **Run length (found in Milestone 8; updated in Milestone 14: about 16 minutes on the shortest path, 18-20 with exploring, after the expansion).** A full run takes about 11-12 minutes for a person (78 boxes and about 1,260 words of reading, 9 choices, 1.5 minutes of walking, cards and screens, plus about a minute of optional signs, overlooks and Katz chats), against the docs' 20-30 minutes. Walking is only 1.5 minutes, so slowing the step can't close the gap. Options: count replays toward the 20-30 minutes (four endings to find), lengthen the maps toward the blueprint's 1-2 minutes between events (question 3), or accept a shorter game. Needs the owner's decision; nothing was changed.
+5. **Early Departure after Event 5 (found in Milestone 8; resolved by the expansion's numbers: both early endings can now trigger at every check).** With the outline's numbers, the ending check after Event 5 can never give Early Departure: the worst case by then is Stamina 2, Supplies 2, Morale 4 (it needs a 0, or Morale 2 or less). Broken Partnership can trigger there, and both early endings can trigger after Event 8. `tests/balance.test.js` checks every choice path. Changing it would mean changing the outline's numbers (for example, lower starting stats or a bigger cost in Events 3-5), so it needs the owner's decision; nothing was changed.

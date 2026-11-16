@@ -103,6 +103,40 @@ export const KATZ_SHAPE = {
     }
 };
 
+// Bill Bryson (Milestone 14): the hat and pack, plus his beard.
+export const BILL_SHAPE = {
+    front: { 6: '.....rrrrrr.....' },
+    side: { 6: '.....rrrs.......' }
+};
+
+// Mary Ellen (Milestone 14): a red bandana over long fair hair, no hat.
+export const MARY_ELLEN_SHAPE = {
+    front: {
+        1: '................',
+        2: '......rrrr......',
+        3: '.....bbbbbb.....',
+        4: '....rrssssrr....',
+        5: '....rsesessr....',
+        6: '....rssssssr....'
+    },
+    back: {
+        1: '................',
+        2: '......rrrr......',
+        3: '.....bbbbbb.....',
+        4: '....rrrrrrrr....',
+        5: '....rrrrrrrr....',
+        6: '....rrssssrr....'
+    },
+    side: {
+        1: '................',
+        2: '.....rrrr.......',
+        3: '....bbbbb.......',
+        4: '....rrssr.......',
+        5: '....resss.......',
+        6: '....rssss.......'
+    }
+};
+
 export const FACINGS = ['down', 'up', 'left', 'right'];
 export const POSES = ['stand', 'stepA', 'stepB'];
 

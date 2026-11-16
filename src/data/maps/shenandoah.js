@@ -1,14 +1,14 @@
 import { LEGEND } from './legend.js';
 
-// Map 3: Virginia, midsummer. Hot green ridges and the trail town of Pine Gap.
-// Design blueprint, Location Progression: Pine Gap at the start with Hazel's
-// diner (Event 5), the dry spring on the ridge (Event 6), ends at the campfire
-// (midpoint scene). Order: Pine Gap (bottom) -> Hazel -> gate -> Event 6 ->
-// gate -> campfire and Sunshine -> midpoint -> exit (top).
+// Map 3: Shenandoah National Park, Virginia (book chapters 8-11). Gentle,
+// green and tamed: Skyline Drive runs along the bottom with a wayside.
+// Order: Skyline Drive and the wayside (bottom) -> the day-tripper: E7 ->
+// log gate -> the ridge (signs, overlook) -> campfire: midpoint (night) ->
+// E8 Katz Goes Home (second ending check) -> exit (top) to Act III.
 export default {
-    key: 'virginia',
-    title: 'Virginia',
-    season: 'Midsummer',
+    key: 'shenandoah',
+    title: 'Shenandoah',
+    season: 'Spring',
     palette: 'summer',
     weather: null,
     legend: LEGEND,
@@ -33,14 +33,14 @@ export default {
         'TTTTTTTTTTTTTTTTTTTTTT,,..,,TTTT', // 16
         'TTTTTTTTTTTTTTTTTTTTTB,,..,,TTTT', // 17
         'TTTTTTTTTTTTTTTTTTTTTT,,..,,TTTT', // 18
-        'TTTTTTTTTBTTTTTTBTTTTT,,..,RTTTT', // 19
+        'TTTTTTTTTNTTTTTTNTTTTT,,..,RTTTT', // 19
         'TTT,,,R,,,,,,,,,,,,,,,,,..,,TTTT', // 20
         'TTT,,,,,,,,,,,,,,,,,,,,,..,,TTTT', // 21
         'TTT,,.....................,,BTTT', // 22
         'TTT,,....................,,,TTTT', // 23
         'TTB,,..,,,,,,,,,,,,,,,,,,,,,TTTT', // 24
         'TTT,,..,R,,,,,,,,,,,,,,,,,,TTTTT', // 25
-        'TTTTTGGTTTTTTTTTTTTTTTTTTTTTTTTT', // 26
+        'TTTTT..TTTTTTTTTTTTTTTTTTTTTTTTT', // 26
         'TTT,,..,,TTTTTTTTTTTTTTTTTTTTTTT', // 27
         'TTTTT..TTTTTTTTTTTTTTTTTTTTTTTTT', // 28
         'TTTR,..,R,,,,,,,,,TTTTTTTTTTTTTT', // 29
@@ -59,25 +59,26 @@ export default {
     ],
 
     npcs: [
-        // Hazel runs the diner and hostel in Pine Gap. Talk to her for Event 5.
-        { id: 'hazel', x: 6, y: 36, facing: 'down', sprite: 'hazel', talk: 'event5_pine_gap' },
-        // Sunshine passes your camp at the midpoint. Her line is part of the midpoint scene.
-        { id: 'sunshine', x: 12, y: 10, facing: 'left', sprite: 'sunshine' }
+        // A day-tripper at the wayside door. Talk to her for E7.
+        { id: 'daytripper', x: 6, y: 36, facing: 'down', sprite: 'daytripper', talk: 'e7_skyline' }
     ],
 
     triggers: [
-        { event: 'event6_last_bottle', x: 5, y: 28, w: 2, h: 1 },
-        { event: 'midpoint_campfire', x: 10, y: 6, w: 2, h: 1 }
+        { event: 'midpoint_campfire', x: 10, y: 6, w: 2, h: 1 },
+        // The road out, a few days later: Katz goes home (E8).
+        { event: 'e8_katz_goes_home', x: 8, y: 3, w: 6, h: 1 }
     ],
 
     gates: [
-        { id: 'pine-gap-log', opensAfter: 'event5_pine_gap', tiles: [[14, 33], [15, 33]] },
-        { id: 'ridge-log', opensAfter: 'event6_last_bottle', tiles: [[5, 26], [6, 26]] }
+        { id: 'wayside-log', opensAfter: 'e7_skyline', tiles: [[14, 33], [15, 33]] }
     ],
 
-    // Sign and overlook lines: the narrator's voice for this act (Milestone 5).
-    signs: [{ x: 17, y: 36, text: 'Pine Gap, Virginia. Diner. Hostel. Showers. Underneath, someone has added in marker: PIE.' }],
-    overlook: { x: 28, y: 9, text: 'Green ridges roll away to the horizon. Much of this was cut for timber once. The forest grew back, slowly, because people let it.' },
+    signs: [
+        { x: 17, y: 36, text: "Skyline Drive. A plaque says the park opened in the 1930s. It says very little about the mountain families who lived here first.", journal: 'shenandoah' },
+        { x: 9, y: 19, text: 'A trail register on a post. Someone has copied out a note about Earl Shaffer, who in 1948 walked the whole trail in one go.', journal: 'shaffer' },
+        { x: 16, y: 19, text: "A faded sign shows Asher Durand's painting of an old American forest: huge trees, deep shade. Almost none of it is left.", journal: 'durand' }
+    ],
+    overlook: { x: 28, y: 9, text: 'Green ridges to the horizon. Once, a quarter of these trees were chestnuts. A blight killed nearly every one.', journal: 'chestnut' },
 
     exit: { x: 8, y: 1, w: 6, h: 1 }
 };

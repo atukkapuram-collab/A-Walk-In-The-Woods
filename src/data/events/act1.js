@@ -1,18 +1,23 @@
-// Act I events (North Georgia). Source of truth: docs/scene-outline.md
-// (Scenes 2-4), then docs/story.md. Choices and stat effects are exactly the
-// outline's. Lines marked // DOC are quoted from the docs word for word; every
-// other line is new writing for Milestone 5 (the owner reviews it).
+// Prologue and Act I events (Hanover, then Georgia; book chapters 1-5).
+// Source of truth: docs/scene-outline.md (Scenes 2-5), then docs/story.md.
+// Choices and stat effects are exactly the outline's. Lines marked // DOC are
+// quoted from the docs word for word; every other line is new writing for
+// Milestone 11 that paraphrases the book (the owner reviews it). Nothing here
+// quotes the book itself at length. (verify) marks a book fact to check.
 //
 // EVENT FORMAT (docs/implementation-plan.md, section 3).
-//   id:     unique id; map files point at it (npcs[].talk, triggers[].event)
+//   id:     unique id; map files point at it (npcs[].talk, triggers[].event);
+//           the opening points at E1 (src/data/opening.js)
 //   scene:  scene number in the outline
 //   steps:  played in order. Each step is one of:
 //     { narrate: 'text' }                    narrator box: italic, no portrait
 //     { say: 'katz', text: 'text' }          dialogue box; speakers are in src/data/speakers.js
 //     { choose: [option, ...] }              2-4 options, then that option's result card
+//     { result: 'text', effects }            a result card with set effects and no choice
+//     { journal: 'id' }                      unlocks a Trail Journal entry (src/data/journal.js)
 //   Any step or option may have `when: (state) => boolean` to show it only sometimes.
 //   `state` is gameState.snapshot from when the event started: the four stats,
-//   miles, the two flags, and `choices` (eventId -> option id picked earlier).
+//   miles, the flags, and `choices` (eventId -> option id picked earlier).
 //   option: { id, text, effects, result, after?, flags? }
 //     id:      stable name of the option; remembered in state.choices for callbacks.
 //     effects: { stamina, supplies, bond, morale, miles } (numbers; miles uses
@@ -22,121 +27,146 @@
 //     after:   optional steps played right after the result card (a short reaction).
 //     flags:   e.g. { skippedAhead: true }.
 //     final:   only on the Final Crossroads options: 'summit' | 'home' | 'ourWay'.
-//              The ending check then runs with that choice.
 //     chance:  instead of effects/result, a coin flip:
 //              [{ id, p: 0.5, effects, result }, { id, p: 0.5, effects, result }]
-//   endingCheck: true runs the mid-trip ending check after the event (Events 5 and 8).
+//   endingCheck: true runs the mid-trip ending check after the event (E6, E8, E11, E13).
+//   bondWhileAway: true lets Bond change although Katz is away (E11 only).
 //   night: true  darkens the map (blue tint, campfire glow) while the event plays.
 //
-// Writing rules (blueprint, Text style): 2-3 sentences per box at most. Katz
-// carries the jokes, the narrator carries the reflection. Narrator voice in
-// Act I: plans, gear lists and mileage math, confident and a little smug.
+// Writing rules (blueprint, Text style): 2-3 sentences per box at most.
+// First person: the player is Bill Bryson. Katz carries most of the jokes.
+// Narrator voice in the Prologue and Act I: gear lists, mileage maths and bears.
 
 const picked = (s, eventId, optionId) => s.choices?.[eventId] === optionId;
 
-export const event1Outfitter = {
-    id: 'event1_outfitter',
+// Scene 2: E1, The Outfitter (tutorial). Played inside the opening (src/data/opening.js).
+export const e1Outfitter = {
+    id: 'e1_outfitter',
     scene: 2,
-    map: 'georgia',
+    map: 'opening',
     steps: [
-        { narrate: 'The outfitter at the trailhead. Your gear list has 61 items, color-coded by weight. A very enthusiastic salesman and Dale the Gear Guy both have opinions about your pack.' },
-        { say: 'salesman', text: "You'll want the deluxe stove, the backup stove and the emergency stove. The mountains punish the unprepared, friend." },
-        { say: 'dale', text: 'I cut the handle off my toothbrush. Four grams. Every gram you carry, you carry two thousand miles.' },
-        { say: 'katz', text: 'They sell snack cakes here. Just putting that out there.' },
+        { narrate: 'The outfitter in Hanover. A cheerful salesman walks me round the shop, and the pile on the counter grows: tent, stove, water filter, a knife with eleven blades.' },
+        { say: 'salesman', text: "You'll want a backup stove. And a backup for the backup. The mountains don't forgive, my friend." },
+        { narrate: 'Every choice on the trail costs something. Four things will decide how far I get: Stamina, Supplies, my Bond with Katz, and Morale.' },
         {
             choose: [
                 {
                     id: 'buyAll',
-                    text: 'Buy everything the salesman suggests.', // DOC
+                    text: 'Buy the whole list.', // DOC
                     effects: { supplies: +2, stamina: -1 },
-                    result: "You're ready for anything, including a back injury.", // DOC
-                    after: [{ say: 'katz', text: 'You look like a vending machine that learned to walk.' }]
+                    result: 'I am ready for anything, including a hernia.', // DOC
+                    after: [{ narrate: 'Fully loaded, the pack weighs about as much as a ten-year-old. I tell myself I will get stronger.' }]
                 },
                 {
-                    id: 'ultralight',
-                    text: 'Pack ultralight like Dale.', // DOC
+                    id: 'guidebook',
+                    text: 'Buy only what the guidebook says you need.', // DOC
                     effects: { stamina: +1, supplies: -1 },
-                    result: 'You saw off your toothbrush handle and feel ridiculous.', // DOC
-                    after: [{ say: 'katz', text: "If you start cutting the handles off forks, I'm going home." }]
+                    result: "Lighter, cheaper, and nagged by a feeling I've forgotten something." // DOC
                 },
                 {
-                    id: 'katz',
-                    text: 'Let Katz choose.', // DOC
-                    effects: { morale: +1, bond: +1, supplies: -1 },
-                    result: 'He buys 14 snack cakes and a hammock neither of you can set up.', // DOC
-                    after: [{ say: 'katz', text: 'Fourteen. One for every day before we give up. Kidding. Mostly.' }]
+                    id: 'katzRoom',
+                    text: 'Leave room for whatever Katz brings.', // DOC
+                    effects: { bond: +1, morale: +1, supplies: -1 },
+                    result: 'Katz will bring snack cakes. Katz will always bring snack cakes.' // DOC
                 }
             ]
         }
     ]
 };
 
-// Sunshine jogging past on the first steps (story.md, "First steps"). Talk trigger on the map.
-export const sunshineMorning = {
-    id: 'sunshine_morning',
+// Scene 3: E2, Katz Lightens His Load (Chapter 2). Step trigger on the climb.
+export const e2LightensLoad = {
+    id: 'e2_lightens_load',
     scene: 3,
     map: 'georgia',
     steps: [
-        { narrate: 'Under the trailhead sign you felt like an explorer. Ten minutes later you are bent over, gasping, when a young hiker jogs past.' },
-        { say: 'sunshine', text: 'Morning!' }, // DOC
-        { narrate: "Her trail name is Sunshine, Katz wheezes. By the time he's said it, she's out of sight. You still haven't moved." }
-    ]
-};
-
-export const event2GoingHome = {
-    id: 'event2_going_home',
-    scene: 3,
-    map: 'georgia',
-    steps: [
-        { narrate: 'Day two. On a muddy climb, Katz drops onto a log and announces the trip is over.' },
-        { narrate: 'Sunshine has just jogged past, which makes it worse.' }, // DOC
-        // What you bought at the outfitter (Event 1) is still on your back.
-        { narrate: "Your pack weighs as much as a fourth-grader. You'd sit down too, but you might never get up again.", when: (s) => picked(s, 'event1_outfitter', 'buyAll') },
-        { narrate: "You're carrying almost nothing and still can't breathe. Dale did not mention this part.", when: (s) => picked(s, 'event1_outfitter', 'ultralight') },
-        { narrate: 'He has eaten thirteen of the fourteen snack cakes since breakfast. The hammock remains unopened.', when: (s) => picked(s, 'event1_outfitter', 'katz') },
-        { say: 'katz', text: "I'm going home." }, // DOC
-        { say: 'katz', text: 'Did you see her? She was jogging. Uphill. Like it was a choice.' },
-        // Snack cakes continuity: if Katz didn't choose the gear, he packed some anyway.
-        { say: 'katz', text: 'I even packed snack cakes. For emergencies. This is the emergency.', when: (s) => !picked(s, 'event1_outfitter', 'katz') },
+        { narrate: 'Day one: Amicalola Falls, then the approach trail up to Springer Mountain, where the trail begins. It is uphill. All of it is uphill.' },
+        // What I bought at the outfitter (E1) is still on my back.
+        { narrate: 'My pack, stuffed with everything the salesman sold me, tries to pull me back down the mountain on every step.', when: (s) => picked(s, 'e1_outfitter', 'buyAll') },
+        { narrate: 'My light pack is the one thing going well. I make a note to thank the guidebook, if I live.', when: (s) => picked(s, 'e1_outfitter', 'guidebook') },
+        { narrate: 'Katz brought exactly what I expected: a great many Little Debbie snack cakes, and very little else of use.', when: (s) => picked(s, 'e1_outfitter', 'katzRoom') },
+        { narrate: 'Day two. Katz is far behind. When he finally appears, red-faced and wheezing, his pack looks a good deal lighter.' },
+        { say: 'katz', text: 'I threw some stuff away. The coffee. The sugar. A lot of the food. It was heavy.' },
+        { say: 'katz', text: "It's down the hill somewhere. Don't look at me like that." },
         {
             choose: [
                 {
-                    id: 'push',
-                    text: 'Push him. "We said the whole trail."', // DOC
-                    effects: { miles: 'plus', bond: -1 },
-                    result: 'He follows in silence, which is worse than complaining.' // DOC
+                    id: 'fetch',
+                    text: 'Climb down and fetch it.', // DOC
+                    effects: { supplies: +1, stamina: -2 },
+                    result: 'An hour of scrambling through brambles, collecting food like an angry squirrel.',
+                    after: [{ say: 'katz', text: 'You went back for the pepperoni? Okay. That I respect.' }]
                 },
                 {
-                    id: 'sit',
-                    text: 'Sit with him.', // DOC
-                    effects: { bond: +2, supplies: -1, miles: 'slow' },
-                    result: 'You share his last snack cake and slow the pace.', // DOC
-                    after: [{ say: 'katz', text: "It's the last one. You can have half. Don't get used to it." }]
+                    id: 'share',
+                    text: 'Share your food with him.', // DOC
+                    effects: { bond: +2, supplies: -2 },
+                    result: 'We will run short sooner. But he is still here, and so am I.',
+                    after: [{ say: 'katz', text: "Thanks. Really. Don't tell anyone I said that." }]
                 },
                 {
-                    id: 'joke',
-                    text: 'Make a joke. "Fine, but home is back over all those hills."', // DOC
-                    effects: { morale: +1 },
-                    result: 'Katz laughs despite himself and stands up.' // DOC
+                    id: 'laugh',
+                    text: 'Laugh it off and keep walking.', // DOC
+                    effects: { morale: +1, bond: -1 },
+                    result: 'It is funny, in its way. Katz does not find it funny at all.',
+                    after: [{ say: 'katz', text: "Glad I'm entertaining somebody." }]
                 }
             ]
         }
     ]
 };
 
-// Scene 4: the Act I close. No choice; the narration changes with Bond.
-export const act1Close = {
-    id: 'act1_close',
+// Scene 4: E3, Mary Ellen (Chapter 5). Talk to her on the map.
+export const e3MaryEllen = {
+    id: 'e3_mary_ellen',
     scene: 4,
     map: 'georgia',
-    night: true,
     steps: [
-        { narrate: 'That night the shelter is crowded with wet hikers and wetter socks. By your math you covered eight miles today. The plan said fourteen.' },
-        { narrate: "You step outside and look up. There are more stars than you've seen in years, so many the sky looks crowded too." },
-        { narrate: 'Inside, Katz snores like a chainsaw. Before he fell asleep he mumbled, "Same time tomorrow?" You realize you were hoping he would.', when: (s) => s.bond >= 5 },
-        { narrate: 'Inside, Katz snores like a chainsaw, his back to your spot. Neither of you said good night.', when: (s) => !(s.bond >= 5) },
-        { narrate: 'Your spreadsheet has no column for this. Am I hiking the trail, you wonder, or is it hiking me?' }
+        { narrate: 'On a long climb we meet Mary Ellen, from Florida. She talks without pausing for breath, mostly about everything we are doing wrong.' },
+        { say: 'maryEllen', text: 'You guys are really slow. Like, really slow. What are you carrying in there, bricks?' },
+        { say: 'maryEllen', text: "I'm walking with you tomorrow. You need somebody who knows what they're doing." },
+        { say: 'katz', text: "If she comes with us, I'm walking into a lake. I'll find a lake." },
+        {
+            choose: [
+                {
+                    id: 'tagAlong',
+                    text: 'Let her tag along.', // DOC
+                    effects: { supplies: +1, morale: -2 },
+                    result: 'She shares her food generously, and her opinions more generously still.',
+                    after: [{ narrate: 'By evening I know her views on tents, Florida, Katz and me. None of them are favorable.' }]
+                },
+                {
+                    id: 'slipAway',
+                    text: 'Slip away at dawn with Katz.', // DOC
+                    effects: { bond: +1, stamina: -1 },
+                    result: 'Packed and gone before sunrise, at a punishing pace. A conspiracy of two.',
+                    after: [{ say: 'katz', text: "Best hike of my life. Keep going. Don't look back." }]
+                },
+                {
+                    id: 'tellHer',
+                    text: "Tell her you'd rather hike alone.", // DOC
+                    effects: { morale: +1, bond: -1 },
+                    result: 'She takes it badly. Katz thinks I was harsh, and is secretly relieved.'
+                }
+            ]
+        }
     ]
 };
 
-export default [event1Outfitter, sunshineMorning, event2GoingHome, act1Close];
+// Scene 5: the Act I close, the woods at night (Chapter 4). No choice; the
+// narration changes with Bond.
+export const act1Close = {
+    id: 'act1_close',
+    scene: 5,
+    map: 'georgia',
+    night: true,
+    steps: [
+        { narrate: 'Night in the woods. No streetlights, no traffic, nothing. The dark is so complete I cannot see my own hand.' },
+        { narrate: 'Then the stars come out, more than I have seen in my life. The woods, I begin to understand, are not like anywhere else.' },
+        { narrate: 'From his tent Katz mumbles, "Same time tomorrow?" and is asleep before I can answer. I find I was hoping he would ask.', when: (s) => s.bond >= 5 },
+        { narrate: 'From his tent Katz snores, loud and steady. Neither of us said good night.', when: (s) => s.bond < 5 },
+        { narrate: 'I planned this walk down to the last ounce. Somehow I never planned for how it would feel.' }
+    ]
+};
+
+export default [e1Outfitter, e2LightensLoad, e3MaryEllen, act1Close];

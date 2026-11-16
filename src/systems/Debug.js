@@ -1,7 +1,12 @@
 import { STATS, FLAGS } from '../state/GameState.js';
+import { JOURNEY } from '../data/journey.js';
+import { placeOfMap } from './TravelPath.js';
 
 // Debug starts for testing without replaying the game, e.g.
 //   ?debug=1&map=georgia&stats=3,3,5,6&flags=skippedAhead&done=event1_outfitter&miles=40
+// Any map in src/data/maps/ works. Starting on an Act III map (Pennsylvania,
+// New England) also sets katzAway, since the start skips E8 (journey `katzAway`).
+// flags: skippedAhead, invited, katzAway, leftWilderness.
 // stats are in the order stamina, supplies, bond, morale.
 // done marks events as already played (their gates start open).
 // choices sets earlier picks for callbacks: choices=event1_outfitter:katz,event5_pine_gap:katzAlone
@@ -32,8 +37,16 @@ export function parseDebugParams(search) {
     return debug;
 }
 
+// Flags a debug start at `mapKey` implies: Katz is away on the Act III maps.
+export function impliedFlagsForMap(mapKey, journey = JOURNEY) {
+    const step = journey.find((s) => s.type === 'map' && s.map === mapKey);
+    return step?.katzAway ? { katzAway: true } : {};
+}
+
 // Applies a parsed debug start to a fresh GameState.
 export function applyDebugStart(state, debug) {
+    for (const f of Object.keys(impliedFlagsForMap(debug.map))) state.setFlag(f, true);
+    if (debug.map) state.trailPos = placeOfMap(debug.map); // the travel map starts from here
     for (const [k, v] of Object.entries(debug.stats)) state.set(k, v);
     for (const f of Object.keys(debug.flags)) state.setFlag(f, true);
     debug.done.forEach((id) => state.markDone(id));

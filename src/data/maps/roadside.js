@@ -1,18 +1,20 @@
 import { LEGEND } from './legend.js';
 
-// The roadside campground (design blueprint, special cases): if Event 8 sets
-// "left the wilderness", the rest of Maine is skipped and the Final Crossroads
-// happens here, by a logging road. A one-screen backdrop: the Final Crossroads
+// The roadside (design blueprint, special cases): if E13 sets "left the
+// wilderness", the rest of Maine is skipped and the Final Crossroads happens
+// here, on the logging road where Katz turned up. A one-screen backdrop: the Final Crossroads
 // starts as soon as the map loads (`autoEvent`).
 export default {
     key: 'roadside',
-    title: 'A roadside campground',
+    title: 'The logging road',
     season: 'Autumn',
     palette: 'autumn',
     weather: 'leaves',
     legend: LEGEND,
     markerTile: 'path',
+    music: 'wilderness',
     autoEvent: 'final_crossroads',
+    npcs: [{ id: 'driver', x: 18, y: 7, facing: 'left', sprite: 'driver' }],
     rows: [
         'TTTTTTTTTTTTTTTTTTTTTTTT', //  0
         'TTTBTTTTTTTTTTTTTTTBTTTT', //  1

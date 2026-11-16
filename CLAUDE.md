@@ -51,9 +51,21 @@ Perspective: top-down, older-Pokemon-style exploration for every setting (no sid
 
 Read these before writing game content or code. Together with docs/planning.md they define the game:
 
-- [docs/story.md](docs/story.md): the story of *Trail Mix*: premise, characters (the Hiker, Katz, Dale, Sunshine, Hazel), the four stats, the three acts, the 8 decision events and the 4 endings.
-- [docs/scene-outline.md](docs/scene-outline.md): the 16 scenes in order, with each scene's purpose, choices and stat effects, the two flags (skipped ahead, left the wilderness), the ending checks, continuity rules and the cut list.
-- [docs/design-blueprint.md](docs/design-blueprint.md): how the game plays: top-down exploration with Katz following, the event/dialogue/choice/result-card flow, the HUD, the four maps and travel screens, the ending template and the 10-hour build plan.
+- [docs/story.md](docs/story.md): the story of *Trail Mix*, following the book:
+  - premise and central theme;
+  - characters (Bill Bryson, Katz, Mary Ellen and other people from the book);
+  - the four stats;
+  - the Prologue and Acts I-IV;
+  - the 13 decision events, the 4 endings and the 13 Journal entries.
+- [docs/scene-outline.md](docs/scene-outline.md): the 23 scenes in book order, with:
+  - chapters, choices and stat effects;
+  - the flags (skipped ahead, invited, Katz away, left the wilderness);
+  - the ending checks, continuity rules and the cut list.
+- [docs/design-blueprint.md](docs/design-blueprint.md): how the game plays:
+  - top-down exploration with Katz following (except in Act III);
+  - the event flow and the HUD;
+  - the six maps and the trail-map travel screen;
+  - the Journal, the ending template and the expansion build plan.
 
 - [docs/implementation-plan.md](docs/implementation-plan.md): the technical build plan: architecture, folder layout and the milestones in order, each with files, dependencies, skills and tests.
 
@@ -65,7 +77,8 @@ If the docs disagree, the scene outline wins on story details and the blueprint 
 
 - Milestones 0-8 are built, committed and pushed to GitHub `main` (fast-forwarded from branch `m8-playtest`, 11/8/2026).
 - **Live on GitHub Pages:** https://atukkapuram-collab.github.io/A-Walk-In-The-Woods/ . `.github/workflows/deploy.yml` runs the tests, builds and publishes `dist/` on every push to `main` (Pages source: GitHub Actions). So anything pushed to `main` goes public: keep work on branches until it's ready.
-- Milestone 8 (playtest, balance, build check, README) is awaiting the owner's review and two decisions: the run length (about 12 minutes against the docs' 20-30), and Early Departure being impossible after Event 5 with the outline's numbers. `docs/handoff.md` has the details.
+- **Expansion approved 11/9/2026:** Milestones 9-14 make the game follow the plot of *A Walk in the Woods*. The player is Bill Bryson, the game covers both halves of the book, it adds a Trail Journal, and Changed Route is tagged "the book's ending". This replaces `docs/planning.md`'s "not a direct recreation" (that file stays as written). Paraphrase the book; never quote more than a short phrase. Lines marked **(verify)** in the docs need checking against the book. Milestones 9-14 are done: docs (M9), engine (M10), Part 1 (M11), Act III, Alone (M12), Maine and the endings (M13), and polish and playtest (M14). The whole game follows the book. With the owner's go-ahead (11/15/2026) they were committed on `m14-polish`, `main` was fast-forwarded to it and pushed, so the live site runs the book version. The owner's review decisions in `docs/handoff.md` are still open. `node scripts/story-review.mjs > docs/story-review.md` regenerates the owner's review script.
+- Milestone 8's two open questions are settled or updated by the expansion: the run length is now about 16-20 minutes, and both early endings can trigger at every check. `docs/handoff.md` has the current owner decisions.
 - All sound is generated in code (Web Audio); there are no audio files. Don't add downloaded sounds without the owner's go-ahead and a license check. `docs/handoff.md` has the details.
 - In the event data, lines marked `// DOC` are quoted word for word from the creative docs; every other line is new writing that the owner reviews.
 - Run with `npm install` then `npm run dev` (http://localhost:8080). `npm test` runs Vitest; `npm run build` writes `dist/`.
@@ -111,8 +124,15 @@ Installed with `npx skills add ... --agent claude-code`:
 16. Built Milestone 7 (code-generated sound effects and music on two volume buses, result-card bounce, footstep dust, outlined and shaded sprites) on branch `m7-polish`.
 17. Milestone 8 on branch `m8-playtest`: a balance test over every choice path, all four endings played from the title, a run-length estimate, the built `dist/` checked, and the README's how-to-play section.
 18. Added the book credit to the title screen, committed Milestones 0-8, and (with the owner's go-ahead) fast-forwarded `main` and pushed it to GitHub.
+19. Planned the book-accurate expansion (Milestones 9-14) and wrote Milestone 9: the story, outline and blueprint rewritten around the book, on branch `m9-book-story`.
+20. Built Milestone 10 (engine changes for the expansion) on branch `m10-engine`.
+21. Built Milestone 11 (Part 1 story content following the book) on branch `m11-part1`.
+22. Built Milestone 12 (Act III: Alone, with the Pennsylvania and White Mountains maps) on branch `m12-part2`.
+23. Built Milestone 13 (Maine and the four endings rewritten around the book) on branch `m13-maine`.
+24. Built Milestone 14 (polish and playtest: tuned miles, the walked/driven travel map, sprites, music, credits, README, a full scripted run) on branch `m14-polish`, then fixed the weather to cover the whole screen.
+25. Committed Milestones 9-14 and (with the owner's go-ahead) fast-forwarded `main` and pushed it to GitHub, which redeploys the live site.
 
 ## Repo state
 
-- `.claude/skills/`, `skills-lock.json`, this file and the docs are committed on `main`. Milestones 0-8 are on `main`, locally and on GitHub. The older local milestone branches `m0-setup` to `m7-polish` were never committed to (they point at the docs commit) and were not pushed.
+- `.claude/skills/`, `skills-lock.json`, this file and the docs are committed on `main`. Milestones 0-14 are on `main`, locally and on GitHub. The older local milestone branches `m0-setup` to `m7-polish` were never committed to (they point at the docs commit) and were not pushed.
 - `skills-lock.json` is written by the skills CLI. It does not include the hand-installed `narrative-design`.

@@ -2,10 +2,11 @@ import { Scene, Input } from 'phaser';
 import { TILE_SIZE, WORLD_ZOOM } from '../config.js';
 import { MAPS } from '../data/maps/index.js';
 import { EVENTS } from '../data/events/index.js';
-import { katzLinesFor, KATZ_WORRIED } from '../data/katz-lines.js';
+import { katzLinesFor, KATZ_WORRIED, ALONE_LINES, ALONE_WORRIED } from '../data/katz-lines.js';
+import { recordJournal } from '../state/persistence.js';
 import { TUNING } from '../data/tuning.js';
 import { TILE_DEFS } from '../art/tiles.js';
-import { gameState } from '../state/GameState.js';
+import { gameState, FLAGS } from '../state/GameState.js';
 import { checkEnding, bondBand } from '../state/endings.js';
 import { parseMap, isBlocked, buildTilemapLayer, openGate } from '../systems/MapBuilder.js';
 import { GridMover, dirBetween } from '../systems/GridMover.js';
@@ -14,11 +15,14 @@ import { stepTriggerAt, talkTarget, gatesOpenedBy, inRect } from '../systems/Int
 import { Controls } from '../systems/Input.js';
 import { Lighting } from '../systems/Lighting.js';
 import { Weather } from '../systems/Weather.js';
-import { nextStep, goToMap, detourFor, go } from '../systems/Journey.js';
+import { nextStep, goToMap, detourFor, go, isSoloMap } from '../systems/Journey.js';
 import { DEBUG } from '../systems/Debug.js';
 import { openOverlay } from '../systems/Transitions.js';
 
 const CAMPFIRE = TILE_DEFS.findIndex((t) => t.name === 'campfire');
+
+// A sign or overlook that unlocks a Journal entry adds this step after its text.
+const journalStep = (id) => (id ? [{ journal: id }] : []);
 
 // One scene for every trail map: start it with { map: 'georgia' } etc.
 // Walking, collision, camera and Katz (M1); events, NPCs, gates, hints (M2);
@@ -67,6 +71,28 @@ export class TrailScene extends Scene {
         }));
         this.syncSprites();
 
+        // NPCs look around now and then (Milestone 14: nobody stands frozen). They
+        // only turn on the spot, so they never block the trail or a trigger.
+        this.time.addEvent({
+            delay: 1400, loop: true, callback: () => {
+                for (const npc of this.npcs) {
+                    if (this.frozen || Math.random() < 0.6) continue;
+                    const dirs = ['down', 'left', 'right', 'down', npc.facing ?? 'down'];
+                    npc.sprite.setFrame(`${dirs[Math.floor(Math.random() * dirs.length)]}-stand`);
+                }
+            }
+        });
+
+        // Katz-away mode (Act III): no follower while he is home in Iowa. He
+        // can leave (E8) or come back (E11) in the middle of a map.
+        // On the maps Bryson walks alone he never appears, even after the phone call.
+        this.soloMap = isSoloMap(this.mapKey);
+        this.katzSprite.setVisible(!this.alone);
+        const offFlag = gameState.on('flag-changed', ({ flag }) => {
+            if (flag === 'katzAway') this.katzSprite.setVisible(!this.alone);
+        });
+        this.events.once('shutdown', offFlag);
+
         // Footstep dust (game-feel, kept light): a tiny puff behind each step.
         this.dust = this.add.particles(0, 0, 'fx-dust', {
             emitting: false,
@@ -102,6 +128,11 @@ export class TrailScene extends Scene {
             this.scene.launch('Dialogue');
             this.scene.get('Dialogue').events.once('create', () => this.onDialogueReady());
         }
+    }
+
+    // Is Bryson walking without Katz right now?
+    get alone() {
+        return gameState.flags.katzAway || this.soloMap;
     }
 
     onDialogueReady() {
@@ -191,20 +222,29 @@ export class TrailScene extends Scene {
         }
         switch (target.kind) {
             case 'event': this.startEvent(target.event); break;
-            case 'sign': this.runEvent({ id: 'sign', steps: [{ narrate: target.text }] }, () => {}); break;
-            case 'overlook': this.overlook(target.text); break;
-            case 'katz': this.katzTalk(); break;
+            case 'sign': this.runEvent({ id: 'sign', steps: [{ narrate: target.text }, ...journalStep(target.journal)] }, () => {}); break;
+            case 'overlook': this.overlook(target.text, target.journal); break;
+            case 'katz': if (this.alone) this.aloneTalk(); else this.katzTalk(); break;
         }
     }
 
     // The scenic overlook: a narrated moment of wonder, Morale +1 once per map.
-    overlook(text) {
+    // It can also unlock a Journal entry.
+    overlook(text, journal = null) {
         if (gameState.overlooksSeen.has(this.mapKey)) {
-            this.runEvent({ id: 'overlook', steps: [{ narrate: text }] }, () => {});
+            this.runEvent({ id: 'overlook', steps: [{ narrate: text }, ...journalStep(journal)] }, () => {});
             return;
         }
         gameState.overlooksSeen.add(this.mapKey);
-        this.runEvent({ id: 'overlook', steps: [{ result: text, effects: { morale: +1 } }] }, () => this.sayWorries());
+        this.runEvent({ id: 'overlook', steps: [{ result: text, effects: { morale: +1 } }, ...journalStep(journal)] }, () => this.sayWorries());
+    }
+
+    // Space on the empty trail while Katz is away: a narrator line about walking alone.
+    aloneTalk() {
+        let i = Math.floor(Math.random() * ALONE_LINES.length);
+        if (i === this.lastKatzLine) i = (i + 1) % ALONE_LINES.length;
+        this.lastKatzLine = i;
+        this.runEvent({ id: 'alone_talk', steps: [{ narrate: ALONE_LINES[i] }] }, () => {});
     }
 
     katzTalk() {
@@ -235,9 +275,16 @@ export class TrailScene extends Scene {
         }, {
             state: gameState.snapshot,
             // Stats change when the result card appears (design blueprint).
+            // Bond is frozen while Katz is away, except where the event allows it (E11).
             onResult: ({ effects, flags }) => {
-                const changes = gameState.apply(effects, flags);
+                const changes = gameState.apply(effects, flags, { bondWhileAway: Boolean(event.bondWhileAway) });
                 this.pendingWorries.push(...gameState.newDangers(changes));
+            },
+            // Journal entries are kept for this walk and between walks.
+            onJournal: (id) => {
+                const isNew = gameState.unlockJournal(id);
+                if (isNew) recordJournal(id);
+                return isNew;
             }
         });
     }
@@ -250,11 +297,11 @@ export class TrailScene extends Scene {
         }
         this.events.emit('event-finished', outcome);
 
-        // Ending checks: after Events 5 and 8 (endingCheck) and at the Final Crossroads (final).
+        // Ending checks: after any event marked endingCheck (E6, E8, E11, E13) and at the Final Crossroads (final).
         if (outcome.final || event.endingCheck) {
             const ending = checkEnding(gameState.snapshot, outcome.final ?? null);
             if (ending) {
-                this.goToEnding({ ending, final: outcome.final ?? null });
+                this.goToEnding({ ending, final: outcome.final ?? null, at: outcome.eventId });
                 return;
             }
         }
@@ -269,12 +316,15 @@ export class TrailScene extends Scene {
         this.sayWorries();
     }
 
-    // Katz says a worried line once when a stat enters its danger zone.
+    // Katz says a worried line once when a stat enters its danger zone; while
+    // he is away, the narrator says it instead.
     sayWorries() {
+        const away = this.alone;
         const worries = this.pendingWorries.filter((stat) => KATZ_WORRIED[stat]);
         this.pendingWorries = [];
         if (!worries.length) return;
-        this.runEvent({ id: 'katz_worried', steps: worries.map((stat) => ({ say: 'katz', text: KATZ_WORRIED[stat] })) }, () => {});
+        const steps = worries.map((stat) => (away ? { narrate: ALONE_WORRIED[stat] } : { say: 'katz', text: KATZ_WORRIED[stat] }));
+        this.runEvent({ id: 'katz_worried', steps }, () => {});
     }
 
     // The map's exit: on to the next step of the journey (a travel screen).
@@ -296,9 +346,9 @@ export class TrailScene extends Scene {
         this.runEvent({
             id: 'debug',
             steps: [
-                { narrate: `Debug (${this.mapKey}). Stamina ${s.stamina}, Supplies ${s.supplies}, Bond ${s.bond}, Morale ${s.morale}, Miles ${s.miles}. Skipped ahead: ${s.skippedAhead}. Left the wilderness: ${s.leftWilderness}. Events done: ${[...gameState.eventsDone].join(', ') || 'none'}.` },
+                { narrate: `Debug (${this.mapKey}). Stamina ${s.stamina}, Supplies ${s.supplies}, Bond ${s.bond}, Morale ${s.morale}, Miles ${s.miles}. Flags: ${FLAGS.filter((f) => s[f]).join(', ') || 'none'}. Journal: ${gameState.journal.size}. Events done: ${[...gameState.eventsDone].join(', ') || 'none'}.` },
                 { choose: [
-                    { text: 'Run the mid-trip ending check (as after Event 5 or 8)' },
+                    { text: 'Run the mid-trip ending check (as after E6, E8, E11 or E13)' },
                     { text: 'Final Crossroads: "Summit or nothing"' },
                     { text: 'Final Crossroads: "Let\'s go home"' },
                     { text: 'Final Crossroads: "Let\'s finish it our way"' }

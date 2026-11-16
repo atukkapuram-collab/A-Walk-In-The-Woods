@@ -8,6 +8,7 @@
 //   { type: 'say', speaker, text }
 //   { type: 'choose', options: [text, ...] }   then call choose(index)
 //   { type: 'result', text, effects, flags, fromChoice }
+//   { type: 'journal', id }                    a Journal entry unlocks (src/data/journal.js)
 //   { type: 'end', outcome }
 export class EventRunner {
     constructor(event, { state = {}, random = Math.random } = {}) {
@@ -40,6 +41,9 @@ export class EventRunner {
             }
             if (step.narrate !== undefined) {
                 return { type: 'narrate', text: step.narrate };
+            }
+            if (step.journal !== undefined) {
+                return { type: 'journal', id: step.journal };
             }
             if (step.say !== undefined) {
                 return { type: 'say', speaker: step.say, text: step.text };

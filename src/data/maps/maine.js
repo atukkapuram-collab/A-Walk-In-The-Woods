@@ -1,12 +1,11 @@
 import { LEGEND } from './legend.js';
 
-// Map 4: Maine, the Hundred-Mile Wilderness, autumn. Red and gold leaves, lakes.
-// Design blueprint, Location Progression: river gate (Event 7), root-covered
-// slope (Event 8), ends at the last campfire (Final Crossroads). No exit: the
-// Final Crossroads always leads to an ending. If Event 8 sets "left the
-// wilderness", the Journey skips the rest of this map (src/data/journey.js).
-// Order: start (bottom) -> Dale -> Event 7 -> river (opens to stepping stones)
-// -> Event 8 -> gate -> last campfire -> Final Crossroads.
+// Map 6: Maine, the Hundred-Mile Wilderness (Act IV; book chapters 19-21).
+// Lakes, roots and rivers, late summer turning to autumn.
+// Order: the Reunion plays as the map starts (bottom) -> E12 The River (the
+// river gate opens to stepping stones) -> E13 Katz Is Lost (night; fourth
+// ending check) -> log gate -> the logging road and the driver: the Final
+// Crossroads (top). With "left the wilderness" set, E13 leads to the roadside map.
 export default {
     key: 'maine',
     title: 'The Hundred-Mile Wilderness',
@@ -15,10 +14,11 @@ export default {
     weather: 'leaves',
     legend: LEGEND,
     markerTile: 'path',
+    music: 'wilderness',
     rows: [
         'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT', //  0
-        'TTTTTT,,,,,,TTTTTTTTTTTTTTTTTTTT', //  1
-        'TTTTTT,,,,,,TTTTTTTTTTTTTTTTTTTT', //  2
+        'TTTTTT======TTTTTTTTTTTTTTTTTTTT', //  1
+        'TTTTTT======TTTTTTTTTTTTTTTTTTTT', //  2
         'TTTTTT,,..,,TTTTTTTTTTTTTTTTTTTT', //  3
         'TTTTTT,,..,,TTTTTTTTTTT,,,,,,TTT', //  4
         'TTTTTT,,..,,TTTTTTTTTTT,WWWW,TTT', //  5
@@ -60,23 +60,26 @@ export default {
         'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT'  // 41
     ],
 
+    // Scene 16, the Reunion: plays as the map starts.
+    autoEvent: 'reunion',
+
     npcs: [
-        // Dale's cameo at the river (Event 7). His line is part of the event.
-        { id: 'dale', x: 25, y: 36, facing: 'left', sprite: 'dale' }
+        // The driver on the logging road. His line is part of the Final Crossroads.
+        { id: 'driver', x: 11, y: 2, facing: 'left', sprite: 'driver' }
     ],
 
     triggers: [
-        { event: 'event7_river', x: 20, y: 35, w: 6, h: 1 },
-        { event: 'event8_fall', x: 6, y: 26, w: 2, h: 1 },
+        { event: 'e12_river', x: 20, y: 35, w: 6, h: 1 },
+        { event: 'e13_katz_is_lost', x: 6, y: 26, w: 2, h: 1 },
+        // Where the trail meets the logging road.
         { event: 'final_crossroads', x: 8, y: 7, w: 2, h: 1 }
     ],
 
     gates: [
-        { id: 'river', opensAfter: 'event7_river', opensTo: 'ford', tiles: [[22, 34], [23, 34]] },
-        { id: 'slope-log', opensAfter: 'event8_fall', tiles: [[6, 24], [7, 24]] }
+        { id: 'river', opensAfter: 'e12_river', opensTo: 'ford', tiles: [[22, 34], [23, 34]] },
+        { id: 'slope-log', opensAfter: 'e13_katz_is_lost', tiles: [[6, 24], [7, 24]] }
     ],
 
-    // Sign and overlook lines: the narrator's voice for this act (Milestone 5).
-    signs: [{ x: 20, y: 37, text: 'A warning sign: no supplies and no help for the next hundred miles, so carry enough food. You count yours. Then you count it again.' }],
-    overlook: { x: 24, y: 8, text: "An icy lake lies perfectly still below, ringed with red and gold. Somewhere a loon calls. You've stopped measuring days in miles." }
+    signs: [{ x: 20, y: 37, text: 'A warning sign: no supplies and no help for the next hundred miles. Do not attempt it without ten days of food. I count ours. Then I count it again.', journal: 'wilderness' }],
+    overlook: { x: 24, y: 8, text: 'A lake lies perfectly still below, ringed with dark spruce. Somewhere a loon calls. I have stopped measuring the days in miles.' }
 };

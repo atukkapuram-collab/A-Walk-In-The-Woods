@@ -10,9 +10,11 @@ import { JOURNEY } from '../src/data/journey.js';
 import { sceneForStep } from '../src/systems/Journey.js';
 import { checkEnding } from '../src/state/endings.js';
 
-// Milestone 5: story content for all 16 scenes. These tests are the
-// "checklist against the outline" from the plan, plus a walk through every
-// branch with many different states.
+// Milestone 5: story content, checked against the outline, plus a walk
+// through every branch with many different states. Since Milestone 11 the
+// scenes are checked against the outline in tests/story-part1.test.js,
+// story-part2.test.js and story-part3.test.js; this file keeps the general
+// checks that run over every event and ending.
 
 const options = (id) => EVENTS[id].steps.find((s) => s.choose).choose;
 const state = (over = {}) => ({
@@ -37,73 +39,12 @@ const texts = (steps) => steps.filter((s) => s.text).map((s) => s.text);
 describe('every choice and stat change matches the scene outline', () => {
     const effects = (id) => options(id).map((o) => o.effects);
 
-    it('Event 3, Whiteout', () => {
-        expect(effects('event3_whiteout')).toEqual([
-            { stamina: 1, morale: -1 },
-            { miles: 'plus', stamina: -2 },
-            { supplies: 1, miles: 'minus' }
-        ]);
-    });
-
-    it('Event 4, Night Visitor', () => {
-        expect(effects('event4_night_visitor')).toEqual([
-            { stamina: -1 },
-            { bond: 1, morale: 1, supplies: -1 },
-            { supplies: -2 }
-        ]);
-    });
-
-    it('Event 5, Pine Gap (and only "Ride ahead together" skips ahead)', () => {
-        expect(effects('event5_pine_gap')).toEqual([
-            { stamina: 2, morale: 1, miles: 'minus' },
-            { supplies: 2, morale: -1 },
-            { miles: 'big', morale: 1 },
-            { bond: -2 }
-        ]);
-        expect(options('event5_pine_gap').map((o) => o.flags ?? {})).toEqual([{}, {}, { skippedAhead: true }, {}]);
-        expect(EVENTS.event5_pine_gap.endingCheck).toBe(true);
-    });
-
-    it('Event 6, The Last Bottle (a coin flip for the gamble)', () => {
-        const [split, ration, gamble] = options('event6_last_bottle');
-        expect(split.effects).toEqual({ bond: 2, stamina: -1 });
-        expect(ration.effects).toEqual({ bond: -1 });
-        expect(gamble.chance.map((c) => [c.p, c.effects])).toEqual([
-            [0.5, { morale: 2 }],
-            [0.5, { stamina: -1, miles: 'minus' }]
-        ]);
-    });
-
-    it('Event 7, The River (fording with Stamina 3 or less also loses Supplies)', () => {
-        const [ford, wait, upstream] = options('event7_river');
-        expect(ford.effects(state({ stamina: 4 }))).toEqual({ bond: 1, stamina: -1 });
-        expect(ford.effects(state({ stamina: 3 }))).toEqual({ bond: 1, stamina: -1, supplies: -1 });
-        expect(wait.effects).toEqual({ supplies: -2, morale: -1 });
-        expect(upstream.effects).toEqual({ stamina: -1, miles: 'minus' });
-    });
-
-    it('Event 8, The Fall (and only walking him out leaves the wilderness)', () => {
-        expect(effects('event8_fall')).toEqual([
-            { stamina: -2, bond: 2 },
-            { miles: 'plus', bond: -1 },
-            { morale: -1 }
-        ]);
-        expect(options('event8_fall').map((o) => o.flags ?? {})).toEqual([{}, {}, { leftWilderness: true }]);
-        expect(EVENTS.event8_fall.endingCheck).toBe(true);
-    });
-
     it('the Final Crossroads: the three choices from the docs, no stat changes', () => {
         expect(options('final_crossroads').map((o) => [o.text, o.final, o.effects])).toEqual([
             ['"Summit or nothing."', 'summit', undefined],
             ['"Let\'s go home."', 'home', undefined],
             ['"Let\'s finish it our way."', 'ourWay', undefined]
         ]);
-    });
-
-    it('scenes without a choice have none: the Act I close, the midpoint, Sunshine', () => {
-        for (const id of ['act1_close', 'midpoint_campfire', 'sunshine_morning']) {
-            expect(EVENTS[id].steps.some((s) => s.choose), id).toBe(false);
-        }
     });
 
     it('no placeholder text is left in any scene', () => {
@@ -125,11 +66,6 @@ describe('option ids (remembered for callbacks)', () => {
         }
     });
 
-    it('a coin flip reports which side came up', () => {
-        const ev = EVENTS.event6_last_bottle;
-        expect(play(ev, 2, state(), () => 0.1).at(-1).outcome.optionId).toBe('gambleWon');
-        expect(play(ev, 2, state(), () => 0.9).at(-1).outcome.optionId).toBe('gambleLost');
-    });
 });
 
 // Every combination that changes which lines show.
@@ -139,9 +75,9 @@ const SUPPLIES = [2, 3];
 const FLAG_SETS = [{}, { skippedAhead: true }, { leftWilderness: true }, { skippedAhead: true, leftWilderness: true }];
 const CHOICE_SETS = [
     {},
-    { event1_outfitter: 'buyAll', event3_whiteout: 'town', event5_pine_gap: 'katzAlone', event8_fall: 'alone' },
-    { event1_outfitter: 'ultralight' },
-    { event1_outfitter: 'katz' }
+    { e1_outfitter: 'buyAll', e4_snowstorm: 'down', e6_rental_car: 'rentCar', e8_katz_goes_home: 'invite', e13_katz_is_lost: 'hikeOut' },
+    { e1_outfitter: 'guidebook', e3_mary_ellen: 'tagAlong' },
+    { e1_outfitter: 'katzRoom', e8_katz_goes_home: 'sayLittle' }
 ];
 function* allStates() {
     for (const bond of BONDS) for (const stamina of STAMINAS) for (const supplies of SUPPLIES)
@@ -194,41 +130,12 @@ describe('walking every branch', () => {
 });
 
 describe('Bond changes the lines, never the branch', () => {
-    it('Act I close: a warmer last look at Katz with Bond 5+', () => {
-        const hi = texts(play(EVENTS.act1_close, 0, state({ bond: 5 }))).join(' ');
-        const lo = texts(play(EVENTS.act1_close, 0, state({ bond: 4 }))).join(' ');
-        expect(hi).toMatch(/Same time tomorrow/);
-        expect(lo).toMatch(/Neither of you said good night/);
-        expect(hi).toMatch(/Am I hiking the trail/);
-        expect(lo).toMatch(/Am I hiking the trail/);
-    });
-
-    it('midpoint: Bond 5+ Katz opens up; 4 or less he checks bus schedules; Sunshine either way', () => {
-        const hi = texts(play(EVENTS.midpoint_campfire, 0, state({ bond: 5 }))).join(' ');
-        const lo = texts(play(EVENTS.midpoint_campfire, 0, state({ bond: 4 }))).join(' ');
-        expect(hi).toMatch(/hadn't finished anything in years/);
-        expect(hi).not.toMatch(/bus schedules/);
-        expect(lo).toMatch(/bus schedules/);
-        expect(lo).not.toMatch(/hadn't finished/);
-        for (const t of [hi, lo]) expect(t).toContain('Nobody walks the trail they planned. You walk the one that shows up.');
-    });
-
-    it("Katz's lines in Pine Gap and at the river follow his Bond band", () => {
-        for (const id of ['event5_pine_gap', 'event7_river']) {
-            const katzLines = (bond) => play(EVENTS[id], 0, state({ bond })).filter((s) => s.speaker === 'katz').map((s) => s.text);
-            const warm = katzLines(8);
-            const neutral = katzLines(6);
-            const sharp = katzLines(3);
-            expect(warm.length).toBeGreaterThan(0);
-            expect(warm[0]).not.toBe(neutral[0]);
-            expect(neutral[0]).not.toBe(sharp[0]);
-        }
-    });
-
-    it('talking to Katz: a line for every band, plus one for each map', () => {
+    it('talking to Katz: a line for every band, plus one for each map he walks', () => {
+        // On the Act III maps Katz is home in Iowa (journey `katzAway`): no lines there.
+        const away = new Set(JOURNEY.filter((s) => s.katzAway).map((s) => s.map));
         for (const band of ['warm', 'neutral', 'sarcastic']) {
             expect(KATZ_LINES[band].length).toBeGreaterThanOrEqual(3);
-            for (const map of Object.keys(MAPS)) {
+            for (const map of Object.keys(MAPS).filter((m) => !away.has(m))) {
                 expect(katzLinesFor(band, map)).toEqual(expect.arrayContaining(KATZ_MAP_LINES[map]));
             }
         }
@@ -236,120 +143,24 @@ describe('Bond changes the lines, never the branch', () => {
     });
 });
 
-describe('callbacks and continuity (scene outline, Continuity Rules)', () => {
-    const shown = (id, pick, over) => texts(play(EVENTS[id], pick, state(over))).join(' | ');
-
-    it('snack cakes: always there in Event 2, bought at the outfitter or packed "for emergencies"', () => {
-        expect(shown('event2_going_home', 1, { choices: { event1_outfitter: 'katz' } })).toMatch(/fourteen snack cakes/);
-        expect(shown('event2_going_home', 1, { choices: { event1_outfitter: 'katz' } })).not.toMatch(/For emergencies/);
-        for (const pick of ['buyAll', 'ultralight', undefined]) {
-            expect(shown('event2_going_home', 1, { choices: { event1_outfitter: pick } })).toMatch(/For emergencies/);
-        }
-        expect(shown('event2_going_home', 1, {})).toMatch(/last snack cake/);
-    });
-
-    it('Dale remembers your outfitter choice in the Whiteout', () => {
-        expect(shown('event3_whiteout', 0, { choices: { event1_outfitter: 'buyAll' } })).toMatch(/its own weather/);
-        expect(shown('event3_whiteout', 0, { choices: { event1_outfitter: 'ultralight' } })).toMatch(/Toothbrush buddy/);
-        expect(shown('event3_whiteout', 0, { choices: { event1_outfitter: 'katz' } })).toMatch(/hammock is not a shelter/);
-    });
-
-    it('the raccoon is revealed in Event 4 whichever you choose, and is on the postcard', () => {
-        for (let i = 0; i < 3; i++) expect(shown('event4_night_visitor', i, {})).toMatch(/raccoon/);
-        expect(ENDINGS.brokenPartnership.steps.map((s) => s.narrate ?? s.text).join(' ')).toMatch(/raccoon holding a bagel/);
-    });
-
-    it("Dale's river cameo, Hazel's line and Sunshine's appearances are in place", () => {
-        expect(shown('event7_river', 0, {})).toContain("Should've packed a packraft.");
-        expect(shown('event5_pine_gap', 0, {})).toContain("Everybody thinks the trail is about the walking. It's about the quitting you don't do.");
-        expect(shown('sunshine_morning', 0, {})).toContain('Morning!');
-        expect(ENDINGS.finishedTrail.steps.map((s) => s.narrate).join(' ')).toMatch(/Sunshine is already there, cheering/);
-    });
-
-    it("Hazel's line is echoed in Early Departure and Finished Trail", () => {
-        for (const id of ['earlyDeparture', 'finishedTrail']) {
-            expect(JSON.stringify(ENDINGS[id].steps), id).toMatch(/Hazel/);
-        }
-    });
-
-    it('the side trail in the Smokies is remembered in Pine Gap', () => {
-        expect(shown('event5_pine_gap', 0, { choices: { event3_whiteout: 'town' } })).toMatch(/plan can bend/);
-        expect(shown('event5_pine_gap', 0, {})).not.toMatch(/side trail in the Smokies/);
-    });
-
-    it('Final Crossroads: roadside version, the truck joke, Katz remembering the slope', () => {
-        expect(shown('final_crossroads', 0, {})).toMatch(/The last campfire/);
-        expect(shown('final_crossroads', 0, { leftWilderness: true })).toMatch(/roadside campground/);
-        expect(shown('final_crossroads', 0, { leftWilderness: true })).not.toMatch(/The last campfire/);
-        expect(shown('final_crossroads', 0, { skippedAhead: true })).toMatch(/truck/);
-        expect(shown('final_crossroads', 0, {})).not.toMatch(/truck/);
-        expect(shown('final_crossroads', 0, { choices: { event8_fall: 'alone' } })).toMatch(/Sitting there alone/);
-        expect(shown('final_crossroads', 0, {})).toMatch(/So what now\?/);
-    });
-
-    it('Final Crossroads narration hints at exactly what the summit needs', () => {
-        const ready = shown('final_crossroads', 0, { stamina: 5, supplies: 3, bond: 5 });
-        const spent = shown('final_crossroads', 0, { stamina: 4, supplies: 2, bond: 4 });
-        expect(ready).toMatch(/trail legs/);
-        expect(ready).toMatch(/food for a few more days/);
-        expect(spent).toMatch(/bodies are spent/);
-        expect(spent).toMatch(/nearly empty/);
-        expect(spent).toMatch(/far side of the fire/);
-    });
-});
-
-describe('Scene 1: the opening', () => {
-    it('plays before Act I, with the suitcase line, and has no choices', () => {
-        expect(JOURNEY[0]).toEqual({ type: 'opening' });
-        expect(sceneForStep(JOURNEY[0])).toEqual(['Opening', {}]);
-        const steps = play(OPENING, 0, state());
-        expect(steps.some((s) => s.type === 'choose')).toBe(false);
-        expect(texts(steps)).toContain('What? It has wheels. Wheels are efficient.');
-        expect(texts(steps).join(' ')).toMatch(/2,190 miles/);
-        for (const s of steps.filter((x) => x.text)) expect(s.text.length).toBeLessThanOrEqual(MAX[s.type]);
-    });
-});
-
-describe('Scenes 13-16: the endings', () => {
+describe('Scenes 20-23: the endings', () => {
     const endingTexts = (id, over = {}, final = null) => texts(play(endingEvent(id), 0, { ...state(over), final }));
 
     it.each(Object.keys(ENDINGS))('%s has 3-6 boxes, a lesson and a final Katz line for each band it can reach', (id) => {
         for (const st of allStates()) {
             for (const final of [null, 'summit', 'home', 'ourWay']) {
-                const steps = play(endingEvent(id), 0, { ...st, final });
+              for (const at of ['e6_rental_car', 'e8_katz_goes_home', 'e11_phone_call', 'final_crossroads']) {
+                const steps = play(endingEvent(id), 0, { ...st, final, at });
                 const boxes = steps.filter((s) => s.text);
                 expect(boxes.length).toBeGreaterThanOrEqual(3);
                 expect(boxes.length).toBeLessThanOrEqual(6);
                 boxes.forEach((b) => expect(b.text.length, b.text).toBeLessThanOrEqual(MAX[b.type]));
+              }
             }
         }
         expect(ENDINGS[id].lesson).toBeTruthy();
         for (const band of ['warm', 'neutral', 'sarcastic']) expect(katzFinalLine(id, band)).toBeTruthy();
     }, 60000);
-
-    it('the lessons are the docs\' lessons, word for word', () => {
-        expect(ENDINGS.brokenPartnership.lesson).toBe('No goal is worth more than the people you take with you.');
-        expect(ENDINGS.earlyDeparture.lesson).toBe("Stopping isn't the same as failing; the trail was harder than your plans.");
-        expect(ENDINGS.finishedTrail.lesson).toBe('Preparation, care for each other and stubbornness can carry you through.');
-        expect(ENDINGS.changedRoute.lesson).toBe('Growth comes from changing your goals when reality changes, not from forcing the original plan.');
-    });
-
-    it("the docs' key ending lines are there", () => {
-        expect(endingTexts('earlyDeparture')).toContain('We walked from there to here. On purpose. Who does that?');
-        expect(endingTexts('changedRoute')).toContain("So we didn't hike the whole thing. We hiked our thing.");
-    });
-
-    it('Early Departure: with high Bond, Katz does the comforting', () => {
-        expect(endingTexts('earlyDeparture', { bond: 7 }).join(' ')).toMatch(/he's the one doing the comforting/);
-        expect(endingTexts('earlyDeparture', { bond: 6 }).join(' ')).not.toMatch(/comforting/);
-    });
-
-    it('Changed Route remembers how you got there', () => {
-        expect(endingTexts('changedRoute', {}, 'summit').join(' ')).toMatch(/turn around without a word/);
-        expect(endingTexts('changedRoute', {}, 'ourWay').join(' ')).not.toMatch(/turn around/);
-        expect(endingTexts('changedRoute', { skippedAhead: true }).join(' ')).toMatch(/Virginia you skipped/);
-        expect(endingTexts('changedRoute', { leftWilderness: true }).join(' ')).toMatch(/ankle takes two weeks/);
-    });
 
     it('the ending rules are unchanged (each ending is reachable from the Final Crossroads)', () => {
         expect(checkEnding(state({ bond: 2 }), 'summit')).toBe('brokenPartnership');
@@ -365,7 +176,7 @@ describe('signs and overlooks', () => {
         for (const [key, map] of Object.entries(MAPS)) {
             for (const sign of map.signs ?? []) {
                 expect(sign.text.length, key).toBeLessThanOrEqual(MAX.narrate);
-                expect(sign.text).not.toMatch(/placeholder/i);
+                if (!map.placeholder) expect(sign.text).not.toMatch(/placeholder/i);
             }
             if (map.overlook) {
                 expect(map.overlook.text.length, key).toBeLessThanOrEqual(MAX.result);

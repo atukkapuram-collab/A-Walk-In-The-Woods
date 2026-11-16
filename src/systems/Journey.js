@@ -10,6 +10,12 @@ export function stepIndexForMap(mapKey, journey = JOURNEY) {
     return journey.findIndex((s) => s.type === 'map' && s.map === mapKey);
 }
 
+// True for the maps Bryson walks alone (Act III): Katz never appears on them,
+// even after the phone call (E11) says he is coming back.
+export function isSoloMap(mapKey, journey = JOURNEY) {
+    return journey.some((s) => s.type === 'map' && s.map === mapKey && s.katzAway);
+}
+
 // Where a detour sends the run after `eventId` on `mapKey`, or null.
 export function detourFor(mapKey, eventId, flags, detours = DETOURS) {
     const d = detours.find((x) => x.map === mapKey && x.afterEvent === eventId && flags[x.flag]);
@@ -22,7 +28,7 @@ export function sceneForStep(step) {
         case 'map': return ['Trail', { map: step.map }];
         case 'opening': return ['Opening', {}];
         case 'act': return ['ActCard', { title: step.title, subtitle: step.subtitle }];
-        case 'travel': return ['Travel', { label: step.label, miles: step.miles, line: step.line, truckLine: step.truckLine, truckIfSkipped: Boolean(step.truckIfSkipped) }];
+        case 'travel': return ['Travel', { label: step.label, to: step.to, miles: step.miles, line: step.line, carLine: step.carLine, carIfSkipped: Boolean(step.carIfSkipped), solo: Boolean(step.solo) }];
         default: throw new Error(`Unknown journey step type "${step.type}".`);
     }
 }

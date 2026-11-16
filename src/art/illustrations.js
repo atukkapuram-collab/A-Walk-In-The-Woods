@@ -6,7 +6,7 @@ import { TRAIL_RIBBON, PLACES, pointForMiles } from '../systems/TravelPath.js';
 // shown at 4x (960x540), so it matches the 16px sprites drawn at the same
 // scale. The characters are the map sprites themselves.
 //
-// Texture keys: 'ill-<name>' for each picture in ILLUSTRATIONS, plus 'fx-truck'.
+// Texture keys: 'ill-<name>' for each picture in ILLUSTRATIONS, plus 'fx-car'.
 // Placeholder art: real pictures can later replace a texture under the same key.
 
 export const ILL_W = 240;
@@ -204,28 +204,20 @@ function airport(p) {
     p.rect(137, 110, 2, 2, '#111');
 }
 
-// Broken Partnership: a bus stop at a road crossing, one hiker left.
-function busStop(p) {
+// Broken Partnership: an empty trail, and a parcel from Des Moines.
+function parcel(p) {
     p.bands(0, 70, ['#7d8590', '#8f97a0', '#a3a9b0', '#b7bcc0']);
     p.poly([[0, 70], [40, 50], [80, 64], [130, 46], [180, 62], [240, 50], [240, 80], [0, 80]], '#4c6a52');
     for (let x = 6; x < 240; x += 14) p.pine(x, 82, 16 + p.rand() * 10, '#2f4a35');
-    p.rect(0, 82, 240, 16, '#4c7a32');
-    p.rect(0, 98, 240, 22, '#5a5a5a');
-    for (let x = 4; x < 240; x += 20) p.rect(x, 108, 10, 2, '#e8dcb0');
-    p.rect(0, 120, 240, 15, '#4c7a32');
-    // The bus, leaving.
-    p.rect(176, 78, 60, 24, '#e8e2d0');
-    p.rect(176, 90, 60, 4, '#3f5f8f');
-    for (let x = 180; x < 232; x += 10) p.rect(x, 81, 7, 6, '#6f8fae');
-    p.disc(188, 103, 3, '#222');
-    p.disc(226, 103, 3, '#222');
-    // Stop sign and bench.
-    p.rect(52, 70, 2, 30, '#6f7a86');
-    p.rect(46, 64, 14, 8, '#3f5f8f');
-    p.rect(70, 92, 30, 3, '#7a5230');
-    p.rect(72, 95, 2, 4, '#5a3b22');
-    p.rect(96, 95, 2, 4, '#5a3b22');
-    p.sprite('hiker', 'right-stand', 30, 106);
+    p.rect(0, 82, 240, 53, '#4c7a32');
+    // The empty trail, narrowing into the trees.
+    p.poly([[96, 135], [144, 135], [126, 84], [116, 84]], '#b08a5a');
+    p.rect(118, 78, 3, 6, '#f4f1e8'); // a white blaze
+    // One hiker, and the parcel on the ground.
+    p.sprite('hiker', 'up-stand', 112, 104);
+    p.rect(150, 112, 14, 9, '#c9a574');
+    p.rect(156, 112, 2, 9, '#8f6e45');
+    p.rect(150, 115, 14, 1, '#8f6e45');
 }
 
 // Early Departure: a motel room, the map spread across the bed.
@@ -250,7 +242,7 @@ function motel(p) {
     p.sprite('katz', 'left-stand', 30, 92);
 }
 
-// Finished Trail: sunrise on the summit above a sea of clouds.
+// Finished Trail: sunrise at Katahdin's summit sign, above a sea of clouds.
 function summit(p) {
     p.bands(0, 90, ['#2f3560', '#4a4a7a', '#7a5a8a', '#b06a8a', '#e08a7a', '#f0aa70', '#f8d090']);
     p.disc(150, 82, 14, '#fff0b8');
@@ -263,27 +255,28 @@ function summit(p) {
     p.rect(142, 80, 20, 8, '#a77a46');
     p.sprite('hiker', 'up-stand', 104, 88);
     p.sprite('katz', 'up-stand', 120, 90);
-    p.sprite('sunshine', 'down-stand', 168, 96);
 }
 
-// Changed Route: a quiet lakeshore in autumn, leaves falling.
-function lakeshore(p) {
+// Changed Route (the book's ending): the logging road out of the woods.
+function loggingRoad(p) {
     p.bands(0, 60, ['#8fb7d8', '#a8c8e0', '#c8dceb', '#e6ece8']);
-    p.poly([[0, 60], [40, 40], [90, 54], [140, 38], [200, 52], [240, 44], [240, 66], [0, 66]], '#8a6a5a');
-    for (let x = 0; x < 240; x += 9) p.disc(x + p.rand() * 6, 64 + p.rand() * 4, 5 + Math.floor(p.rand() * 3), ['#c0392b', '#e08a35', '#d9a33a', '#a0522d'][Math.floor(p.rand() * 4)]);
-    p.rect(0, 70, 240, 40, '#3b6ea8');
-    for (let i = 0; i < 18; i++) p.rect(p.rand() * 220, 74 + p.rand() * 32, 10 + p.rand() * 14, 1, '#6f9fd1');
-    for (let i = 0; i < 10; i++) p.rect(p.rand() * 220, 72 + p.rand() * 10, 6, 1, '#c0703a');
-    p.poly([[0, 108], [80, 104], [160, 110], [240, 104], [240, 135], [0, 135]], '#b08a5a');
-    p.rect(0, 120, 240, 15, '#8f6e45');
-    for (const x of [16, 210]) {
-        p.rect(x, 74, 4, 40, '#5a3b22');
-        p.disc(x + 2, 70, 14, x < 100 ? '#c0392b' : '#e08a35');
-        p.disc(x - 6, 78, 8, x < 100 ? '#e05a3a' : '#d9a33a');
-    }
-    p.sprite('hiker', 'up-stand', 102, 100);
-    p.sprite('katz', 'up-stand', 120, 100);
-    for (let i = 0; i < 16; i++) p.rect(p.rand() * 240, p.rand() * 100, 2, 1, ['#e08a35', '#c0392b', '#d9a33a'][i % 3]);
+    // Katahdin, far off and unclimbed.
+    p.poly([[130, 62], [168, 30], [182, 36], [196, 28], [228, 62]], '#7f8aa0');
+    p.poly([[168, 30], [182, 36], [196, 28], [190, 38], [174, 40]], '#a9b3c6');
+    p.poly([[0, 62], [50, 48], [110, 58], [160, 50], [240, 58], [240, 70], [0, 70]], '#3f6a4a');
+    for (let x = 4; x < 240; x += 11) p.pine(x, 74, 18 + p.rand() * 12, x % 3 ? '#2f5a3a' : '#274a30');
+    p.rect(0, 74, 240, 61, '#4c7a32');
+    // The gravel road, running out of the woods toward us.
+    p.poly([[70, 135], [190, 135], [132, 74], [118, 74]], '#8f877a');
+    p.poly([[122, 135], [138, 135], [126, 74], [124, 74]], '#a59c8e');
+    // The pickup, waiting.
+    p.rect(150, 86, 26, 10, '#b3423a');
+    p.rect(166, 80, 10, 7, '#c9534a');
+    p.rect(168, 81, 6, 4, '#a8d0e6');
+    p.disc(156, 97, 3, '#222');
+    p.disc(171, 97, 3, '#222');
+    p.sprite('hiker', 'up-stand', 104, 100);
+    p.sprite('katz', 'up-stand', 122, 100);
 }
 
 // The travel screen map: a simple East Coast with the trail's ribbon.
@@ -309,7 +302,7 @@ function travelMap(p) {
     p.poly([[kx - 6, ky + 4], [kx + 1, ky - 6], [kx + 8, ky + 4]], '#8a8d8f');
 }
 
-export const ILLUSTRATIONS = { title, kitchen, phone, airport, busStop, motel, summit, lakeshore, travelMap };
+export const ILLUSTRATIONS = { title, kitchen, phone, airport, parcel, motel, summit, loggingRoad, travelMap };
 
 // Pictures shown behind the dialogue box are raised (rows) so the people stay
 // visible, with the floor colour filling the bottom.
@@ -317,22 +310,25 @@ const RAISE = {
     kitchen: [-18, '#2a2438'],
     phone: [-30, '#2a2438'],
     airport: [-24, '#a8a59a'],
-    busStop: [-30, '#4c7a32'],
+    parcel: [-30, '#4c7a32'],
     motel: [-24, '#4a4038'],
     summit: [-24, '#6d6a6e'],
-    lakeshore: [-26, '#8f6e45']
+    loggingRoad: [-26, '#8f877a']
 };
 
-// The small pickup truck for the "skipped ahead" travel screen (24x14, faces right).
-function truck(scene) {
-    const t = scene.textures.createCanvas('fx-truck', 24, 14);
+// The rented car for the "skipped ahead" travel screen (24x14, faces right),
+// with Katz and Bill in the front seats.
+function car(scene) {
+    const t = scene.textures.createCanvas('fx-car', 24, 14);
     const p = painter(t.getContext(), scene);
-    p.rect(0, 5, 15, 6, '#b3423a');
-    p.rect(14, 2, 8, 9, '#c9534a');
-    p.rect(16, 3, 5, 4, '#a8d0e6');
-    p.rect(22, 7, 2, 3, '#f4d77a');
-    p.rect(1, 3, 3, 2, '#3b2a1e'); // Katz's hair in the back
-    p.rect(6, 3, 3, 2, '#9a6b3f'); // the Hiker's hat
+    p.rect(1, 6, 22, 5, '#3f6fa8');
+    p.rect(5, 2, 13, 5, '#4f82bd');
+    p.rect(7, 3, 4, 3, '#a8d0e6');
+    p.rect(12, 3, 5, 3, '#a8d0e6');
+    p.rect(8, 4, 2, 2, '#3b2a1e'); // Katz
+    p.rect(13, 3, 3, 2, '#9a6b3f'); // Bill's hat
+    p.rect(22, 7, 2, 2, '#f4d77a');
+    p.rect(0, 7, 1, 2, '#c0392b');
     p.disc(5, 11, 2, '#222');
     p.disc(18, 11, 2, '#222');
     t.refresh();
@@ -347,7 +343,7 @@ export function generateIllustrations(scene) {
         draw(painter(t.getContext(), scene, i + 7, oy));
         t.refresh();
     });
-    truck(scene);
+    car(scene);
 }
 
 // Adds an illustration to a scene, filling the screen (960x540).

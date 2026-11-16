@@ -1,15 +1,15 @@
 import { describe, it, expect, vi } from 'vitest';
 import { sanitizeSettings, getSettings, saveSettings, textCps, DEFAULT_SETTINGS } from '../src/state/settings.js';
 import { loadSave, recordEnding } from '../src/state/persistence.js';
-import { endingsFoundList, ENDINGS, EARLY_ENDING_LINE } from '../src/data/endings.js';
+import { endingsFoundList, ENDINGS, EARLY_ENDING_LINE, earlyEndingLine, endsAlone, milesLine } from '../src/data/endings.js';
 import { OPENING_PANELS, OPENING } from '../src/data/opening.js';
 import { ILLUSTRATIONS } from '../src/art/illustrations.js';
 import { pointAt, pointForMiles, TRAIL_RIBBON, PLACES } from '../src/systems/TravelPath.js';
 import { JOURNEY } from '../src/data/journey.js';
 import { sceneForStep } from '../src/systems/Journey.js';
+import { EVENTS } from '../src/data/events/index.js';
 import { fadeTo, closeOverlay, openOverlay } from '../src/systems/Transitions.js';
 import { GameState } from '../src/state/GameState.js';
-import { editName, NAME_MAX } from '../src/systems/NameEntry.js';
 
 // Milestone 6: menus, settings, opening, travel, endings. The Phaser scenes
 // are checked in the browser; these cover the logic behind them.
@@ -43,31 +43,13 @@ describe('settings', () => {
     });
 });
 
-describe('name entry', () => {
-    const type = (keys) => keys.reduce(editName, '');
-
-    it('takes letters, spaces, hyphens and apostrophes; Backspace deletes', () => {
-        expect(type(['A', 'n', 'n', ' ', 'O', "'", 'B', '-', 'x', 'Backspace'])).toBe("Ann O'B-");
-    });
-
-    it(`ignores other keys, a leading space, and anything past ${NAME_MAX} characters`, () => {
-        expect(type([' ', 'Shift', 'ArrowUp', '!', 'J'])).toBe('J');
-        expect(type(Array(20).fill('a')).length).toBe(NAME_MAX);
-    });
-
-    it('a new run starts as "Hiker" until named', () => {
-        const s = new GameState();
-        s.playerName = 'Pat';
-        s.reset();
-        expect(s.playerName).toBe('Hiker');
-    });
-});
-
 describe('the opening panels', () => {
-    it('three panels, each with a picture that exists, holding the whole opening', () => {
-        expect(OPENING_PANELS.map((p) => p.art)).toEqual(['kitchen', 'phone', 'airport']);
+    it('four panels, each with a picture that exists; the second plays E1 (the Outfitter)', () => {
+        expect(OPENING_PANELS.map((p) => p.art)).toEqual(['kitchen', 'kitchen', 'phone', 'airport']);
         for (const p of OPENING_PANELS) expect(ILLUSTRATIONS[p.art], p.art).toBeTypeOf('function');
-        expect(OPENING.steps).toEqual(OPENING_PANELS.flatMap((p) => p.steps));
+        expect(OPENING_PANELS.map((p) => p.event ?? null)).toEqual([null, 'e1_outfitter', null, null]);
+        expect(EVENTS.e1_outfitter).toBeDefined();
+        expect(OPENING.steps).toEqual(OPENING_PANELS.flatMap((p) => p.steps ?? []));
     });
 });
 
@@ -86,25 +68,26 @@ describe('the travel screen', () => {
         expect(pointForMiles(5000)).toEqual(TRAIL_RIBBON.at(-1));
     });
 
-    it('marks the four places in trail order', () => {
-        expect(PLACES.map((p) => p.name)).toEqual(['Georgia', 'Smokies', 'Virginia', 'Maine']);
+    it('marks the six places in trail order', () => {
+        expect(PLACES.map((p) => p.name)).toEqual(['Georgia', 'Smokies', 'Shenandoah', 'Pennsylvania', 'White Mountains', 'Maine']);
+        PLACES.slice(1).forEach((p, i) => expect(p.miles).toBeGreaterThan(PLACES[i].miles));
     });
 
-    it('every travel step has a label, miles and a narrator line; the truck version follows Pine Gap', () => {
+    it('every travel step has a label, miles and a narrator line; the rental car follows the Smokies', () => {
         const travel = JOURNEY.filter((s) => s.type === 'travel');
-        expect(travel).toHaveLength(3);
+        expect(travel).toHaveLength(5);
         for (const t of travel) {
             expect(t.label).toBeTruthy();
             expect(t.miles).toBeGreaterThan(0);
             expect(t.line.length).toBeLessThanOrEqual(130);
         }
-        const truck = travel.filter((t) => t.truckIfSkipped);
-        expect(truck).toHaveLength(1);
-        // The truck screen is the one after Virginia (where Event 5 sets "skipped ahead").
-        const i = JOURNEY.indexOf(truck[0]);
-        expect(JOURNEY[i - 1]).toEqual({ type: 'map', map: 'virginia' });
-        expect(truck[0].truckLine.length).toBeLessThanOrEqual(130);
-        expect(sceneForStep(truck[0])).toEqual(['Travel', expect.objectContaining({ truckIfSkipped: true, truckLine: truck[0].truckLine })]);
+        const car = travel.filter((t) => t.carIfSkipped);
+        expect(car).toHaveLength(1);
+        // The car screen is the one after the Smokies (where E6 sets "skipped ahead", Chapters 7-8).
+        const i = JOURNEY.indexOf(car[0]);
+        expect(JOURNEY[i - 1]).toEqual({ type: 'map', map: 'smokies' });
+        expect(car[0].carLine.length).toBeLessThanOrEqual(130);
+        expect(sceneForStep(car[0])).toEqual(['Travel', expect.objectContaining({ carIfSkipped: true, carLine: car[0].carLine })]);
     });
 
     it('every journey step type has its own scene', () => {
@@ -120,6 +103,25 @@ describe('ending screens', () => {
 
     it("the early-ending line is the blueprint's, word for word", () => {
         expect(EARLY_ENDING_LINE).toBe("And that's where the trail ended for us.");
+        expect(earlyEndingLine(false)).toBe(EARLY_ENDING_LINE);
+    });
+
+    it('in Act III the early-ending line says "for me": Katz away, or refused or stopped at the phone call', () => {
+        expect(earlyEndingLine(true)).toBe("And that's where the trail ended for me.");
+        expect(endsAlone({ katzAway: true })).toBe(true);
+        expect(endsAlone({ katzAway: false, at: 'e11_phone_call' })).toBe(true);
+        expect(endsAlone({ katzAway: false, at: 'e13_katz_is_lost' })).toBe(false);
+    });
+
+    it("the ending card compares the player's miles with Bryson and Katz's", () => {
+        expect(milesLine(1234)).toBe('You: 1,234 miles · Bryson & Katz: about 870 of 2,190');
+    });
+
+    it('only Changed Route is tagged as the book\'s ending, on the card and in Endings Found once found', () => {
+        expect(ENDINGS.changedRoute.tag).toBe("The book's ending");
+        expect(Object.values(ENDINGS).filter((e) => e.tag === "The book's ending")).toHaveLength(1);
+        expect(endingsFoundList(['changedRoute']).map((e) => e.tag)).toEqual([null, null, null, "The book's ending"]);
+        expect(endingsFoundList([]).every((e) => e.tag === null)).toBe(true);
     });
 
     it('Endings Found shows exactly the endings reached, in order, others as "???"', () => {

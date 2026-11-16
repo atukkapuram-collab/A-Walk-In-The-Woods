@@ -9,13 +9,36 @@ export const TRAIL_RIBBON = [
     [118, 60], [130, 54], [142, 49], [154, 43], [166, 37], [178, 31], [192, 24], [204, 18]
 ];
 
-// Where the four maps sit on the ribbon, as miles (labels on the map).
+// Where the six maps sit on the ribbon, as trail miles (labels on the map).
+// Roughly the real trail's positions (Springer Mountain = 0, Katahdin = 2,190).
 export const PLACES = [
-    { name: 'Georgia', miles: 0 },
-    { name: 'Smokies', miles: 165 },
-    { name: 'Virginia', miles: 540 },
-    { name: 'Maine', miles: 1960 }
+    { name: 'Georgia', map: 'georgia', miles: 0 },
+    { name: 'Smokies', map: 'smokies', miles: 165 },
+    { name: 'Shenandoah', map: 'shenandoah', miles: 860 },
+    { name: 'Pennsylvania', map: 'pennsylvania', miles: 1150 },
+    { name: 'White Mountains', map: 'newengland', miles: 1860 },
+    { name: 'Maine', map: 'maine', miles: 2060 }
 ];
+
+// The trail position (miles) of a map, for debug starts.
+export function placeOfMap(mapKey) {
+    return PLACES.find((p) => p.map === mapKey)?.miles ?? (mapKey === 'roadside' ? 2120 : 0);
+}
+
+// The stretches of trail behind the marker, split into walked and skipped
+// pieces: [{ from, to, skipped }], in order. Used to draw the travel map.
+export function travelledPieces(pos, skippedRanges = []) {
+    const pieces = [];
+    let at = 0;
+    for (const [a, b] of [...skippedRanges].sort((x, y) => x[0] - y[0])) {
+        if (a >= pos) break;
+        if (a > at) pieces.push({ from: at, to: a, skipped: false });
+        pieces.push({ from: Math.max(a, at), to: Math.min(b, pos), skipped: true });
+        at = Math.min(b, pos);
+    }
+    if (pos > at) pieces.push({ from: at, to: pos, skipped: false });
+    return pieces.filter((p) => p.to > p.from);
+}
 
 const segLength = ([ax, ay], [bx, by]) => Math.hypot(bx - ax, by - ay);
 

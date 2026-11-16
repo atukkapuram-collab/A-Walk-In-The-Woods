@@ -1,17 +1,16 @@
 import { Scene } from 'phaser';
-import { GAME_WIDTH } from '../config.js';
 import { OPENING_PANELS } from '../data/opening.js';
+import { EVENTS } from '../data/events/index.js';
 import { gameState } from '../state/GameState.js';
 import { nextStep } from '../systems/Journey.js';
 import { fadeIn } from '../systems/Transitions.js';
 import { Controls } from '../systems/Input.js';
 import { addIllustration } from '../art/illustrations.js';
-import { audio } from '../systems/Audio.js';
-import { UI, textStyle, drawPanel } from '../ui/theme.js';
-import { editName, NAME_MAX, DEFAULT_NAME } from '../systems/NameEntry.js';
 
-// Scene 1, the opening (design blueprint, Location Progression): name entry,
-// then three illustrated still panels with narration, from src/data/opening.js.
+// Scene 1, the opening (design blueprint, Location Progression): illustrated
+// still panels with narration, from src/data/opening.js. There is no name
+// entry: the player is Bill Bryson (Milestone 10). A panel can play an event
+// instead (E1, the Outfitter): its result card changes the stats, as on the trail.
 // Esc skips the panels (for replays). Then the Journey moves on to Act I.
 export class OpeningScene extends Scene {
     constructor() {
@@ -19,9 +18,9 @@ export class OpeningScene extends Scene {
     }
 
     init() {
-        this.name = '';
-        this.naming = false;
         this.leaving = false;
+        this.current = -1;   // the panel being shown
+        this.skipTo = null;  // set by Esc: the E1 panel to jump to
     }
 
     create() {
@@ -32,58 +31,37 @@ export class OpeningScene extends Scene {
         this.scene.get('Dialogue').events.once('create', () => {
             this.dialogue = this.scene.get('Dialogue');
             this.scene.bringToTop('Dialogue');
-            this.askName();
+            this.playPanel(0);
         });
-    }
-
-    askName() {
-        this.naming = true;
-        const w = 620;
-        const x = (GAME_WIDTH - w) / 2;
-        const y = 150;
-        const panel = this.add.graphics();
-        drawPanel(panel, x, y, w, 190);
-        const prompt = this.add.text(GAME_WIDTH / 2, y + 40, 'Before you set out: what is your name?', textStyle(22)).setOrigin(0.5);
-        this.nameText = this.add.text(GAME_WIDTH / 2, y + 95, '', textStyle(30, { color: UI.name })).setOrigin(0.5);
-        const hint = this.add.text(GAME_WIDTH / 2, y + 150, `Type up to ${NAME_MAX} letters, then press Enter`, textStyle(15, { color: UI.muted })).setOrigin(0.5);
-        this.nameUi = [panel, prompt, this.nameText, hint];
-        this.cursorOn = true;
-        this.blink = this.time.addEvent({ delay: 450, loop: true, callback: () => { this.cursorOn = !this.cursorOn; this.drawName(); } });
-        this.drawName();
-
-        this.onKey = (event) => {
-            if (event.key === 'Enter') return this.finishName();
-            const next = editName(this.name, event.key);
-            if (next !== this.name) audio.blip('narrator');
-            this.name = next;
-            this.drawName();
-        };
-        this.input.keyboard.on('keydown', this.onKey);
-    }
-
-    drawName() {
-        this.nameText.setText(`${this.name}${this.cursorOn ? '_' : ' '}`);
-    }
-
-    finishName() {
-        this.input.keyboard.off('keydown', this.onKey);
-        this.blink.remove();
-        this.nameUi.forEach((o) => o.destroy());
-        this.naming = false;
-        gameState.playerName = this.name.trim() || DEFAULT_NAME;
-        this.controls.flush();
-        this.dialogue.controls.flush(); // the Enter (or spaces) typed shouldn't advance the first box
-        this.playPanel(0);
     }
 
     playPanel(i) {
         if (this.leaving) return;
+        if (this.skipTo !== null && i < this.skipTo) i = this.skipTo;
+        this.skipTo = null;
+        this.current = i;
         const panel = OPENING_PANELS[i];
         if (!panel) return this.leave();
         if (i > 0) this.showArt(panel.art);
         this.time.delayedCall(i > 0 ? 450 : 200, () => {
             if (this.leaving) return;
+            if (this.skipTo !== null) return this.playPanel(this.skipTo); // Esc during the cross-fade
+            if (panel.event) return this.playEvent(EVENTS[panel.event], () => this.playPanel(i + 1));
             this.dialogue.play({ id: `opening_${i}`, steps: panel.steps }, () => this.playPanel(i + 1), { state: gameState.snapshot });
+        });
+    }
+
+    // An event inside the opening (E1): stats change at its result card, and
+    // the choice is remembered for later callbacks.
+    playEvent(event, next) {
+        if (!event) throw new Error('An opening panel points at an unknown event.');
+        this.dialogue.play(event, (outcome) => {
+            gameState.markDone(outcome.eventId);
+            gameState.recordChoice(outcome.eventId, outcome.optionId);
+            next();
+        }, {
+            state: gameState.snapshot,
+            onResult: ({ effects, flags }) => gameState.apply(effects, flags)
         });
     }
 
@@ -94,6 +72,20 @@ export class OpeningScene extends Scene {
         this.tweens.add({ targets: this.art, alpha: 1, duration: 400, onComplete: () => old.destroy() });
     }
 
+    // Esc skips the panels (for replays), but never E1's choice: it jumps to
+    // E1 if it hasn't been played yet, otherwise on to Act I.
+    skip() {
+        if (OPENING_PANELS[this.current]?.event) return; // the choice can't be skipped
+        const e1 = OPENING_PANELS.findIndex((p) => p.event && !gameState.eventsDone.has(p.event));
+        if (e1 < 0) {
+            if (this.dialogue?.playing) this.dialogue.finish({ choice: null, eventId: null });
+            return this.leave();
+        }
+        this.skipTo = e1;
+        // Ending the current box moves on to the next panel, which jumps to E1.
+        if (this.dialogue?.playing) this.dialogue.finish({ choice: null, eventId: null });
+    }
+
     leave() {
         if (this.leaving) return;
         this.leaving = true;
@@ -101,6 +93,6 @@ export class OpeningScene extends Scene {
     }
 
     update() {
-        if (!this.naming && !this.leaving && this.controls.justPressed('pause')) this.leave();
+        if (!this.leaving && this.controls.justPressed('pause')) this.skip();
     }
 }

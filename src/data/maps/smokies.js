@@ -1,10 +1,10 @@
 import { LEGEND } from './legend.js';
 
-// Map 2: Great Smoky Mountains, late spring. Fog, snow patches, bear signs.
-// Design blueprint, Location Progression: snowed-in shelter (Event 3), night
-// campsite (Event 4, dark tint), ends at the trail exit.
-// Order on the trail: start (bottom-left) -> shelter and Dale -> Event 3 ->
-// snowdrift gate -> campfire -> Event 4 (night) -> fallen-tree gate -> exit (top).
+// Map 2: the Great Smoky Mountains, then Gatlinburg (book chapters 6-8).
+// Snow, fog, dying firs and bear signs.
+// Order on the trail: start (bottom-left) -> snowbound shelter and hikers ->
+// E4 Snowstorm -> snowdrift gate -> campfire -> E5 Night Noises (night) ->
+// fallen-tree gate -> the road down to Gatlinburg: E6 The Rental Car -> exit (top).
 // Rows were carved with a helper script; edit them by hand freely. `npm test` checks them.
 export default {
     key: 'smokies',
@@ -16,7 +16,7 @@ export default {
     markerTile: 'path',
     rows: [
         'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT', //  0
-        'TTTTTTTTTTTTTTTTTTTT,,..,,TTTTTT', //  1
+        'TTTTTTTTTTTTTTTTTTTT======TTTTTT', //  1
         'TTTTTTTTTTTTTTTTTTTT,,..,,TTTTTT', //  2
         'TTTTTTTTTTTTTTTTTTTT,,..,,,,,,TT', //  3
         'TTTTTTTTTTTTTTTTTTTT,,..,,,,XLTT', //  4
@@ -58,23 +58,26 @@ export default {
     ],
 
     npcs: [
-        // Dale is inside the packed shelter during the Whiteout (Event 3). His lines are part of the event.
-        { id: 'dale', x: 26, y: 27, facing: 'left', sprite: 'dale' }
+        // Hikers in the packed shelter during the snowstorm (E4). Their line is part of the event.
+        { id: 'hiker', x: 26, y: 27, facing: 'left', sprite: 'hiker1' },
+        // The rental clerk by the road into Gatlinburg (E6).
+        { id: 'clerk', x: 26, y: 3, facing: 'left', sprite: 'clerk' }
     ],
 
     triggers: [
-        { event: 'event3_whiteout', x: 24, y: 25, w: 2, h: 1 },
-        { event: 'event4_night_visitor', x: 8, y: 15, w: 2, h: 1 }
+        { event: 'e4_snowstorm', x: 24, y: 25, w: 2, h: 1 },
+        { event: 'e5_night_noises', x: 8, y: 15, w: 2, h: 1 },
+        // Gatlinburg, where the road comes in: E6 (first ending check).
+        { event: 'e6_rental_car', x: 20, y: 2, w: 6, h: 1 }
     ],
 
     gates: [
-        { id: 'snowdrift', opensAfter: 'event3_whiteout', tiles: [[24, 22], [25, 22]] },
-        { id: 'fallen-tree', opensAfter: 'event4_night_visitor', tiles: [[8, 12], [9, 12]] }
+        { id: 'snowdrift', opensAfter: 'e4_snowstorm', tiles: [[24, 22], [25, 22]] },
+        { id: 'fallen-tree', opensAfter: 'e5_night_noises', tiles: [[8, 12], [9, 12]] }
     ],
 
-    // Sign and overlook lines: the narrator's voice for this act (Milestone 5).
-    signs: [{ x: 3, y: 36, text: 'Bears live here, says the sign, and lists what to do if you meet one. Katz reads it twice and walks a little closer to you.' }],
-    overlook: { x: 29, y: 4, text: 'Fog fills the valleys below, and the ridges float above it like islands. You forget to check your watch.' },
+    signs: [{ x: 3, y: 36, text: 'Bears live here, says the sign, and lists what to do if you meet one. Katz reads it twice and walks a little closer to me.', journal: 'bears' }],
+    overlook: { x: 29, y: 4, text: 'Below, whole ridges of Fraser firs stand grey and dead. From up here the forest looks like a ghost of itself.', journal: 'firs' },
 
     exit: { x: 20, y: 1, w: 6, h: 1 }
 };

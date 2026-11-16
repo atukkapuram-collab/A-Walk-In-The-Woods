@@ -7,7 +7,7 @@ describe('GameState', () => {
         const s = new GameState();
         expect(s.snapshot).toEqual({
             stamina: 6, supplies: 6, bond: 5, morale: 6, miles: 0,
-            skippedAhead: false, leftWilderness: false, choices: {}
+            skippedAhead: false, invited: false, katzAway: false, leftWilderness: false, choices: {}
         });
     });
 

@@ -26,12 +26,14 @@ export const VOICES = {
     narrator: -5,
     katz: -9,
     salesman: -2,
-    dale: 3,
-    sunshine: 7,
-    hazel: -4
+    maryEllen: 9,
+    hiker: 0,
+    clerk: -3,
+    daytripper: 5,
+    driver: -6
 };
 
-// The two music loops (original, written for this game). Each bar is one
+// The music loops (original, written for this game). Each bar is one
 // chord (MIDI notes) and four beats of melody (null = rest). Bass plays the
 // chord's lowest note on beats 1 and 3.
 export const MUSIC = {
@@ -47,6 +49,34 @@ export const MUSIC = {
             { chord: [36, 60, 64, 67], melody: [76, 74, 72, 71] },   // C
             { chord: [38, 62, 66, 69], melody: [69, 71, 69, 66] },   // D
             { chord: [43, 59, 62, 67], melody: [67, null, null, null] } // G
+        ]
+    },
+    // Act III, alone: the walking tune's slower, emptier cousin in A minor.
+    alone: {
+        bpm: 72,
+        bars: [
+            { chord: [45, 60, 64, 69], melody: [76, null, 72, null] },  // Am
+            { chord: [41, 60, 65, 69], melody: [74, null, 72, 69] },    // F
+            { chord: [36, 60, 64, 67], melody: [67, null, null, 72] },  // C
+            { chord: [43, 59, 62, 67], melody: [71, null, 67, null] },  // G
+            { chord: [45, 60, 64, 69], melody: [76, null, 79, 76] },    // Am
+            { chord: [41, 60, 65, 69], melody: [77, 76, 74, null] },    // F
+            { chord: [40, 59, 64, 68], melody: [71, null, 68, null] },  // E
+            { chord: [45, 60, 64, 69], melody: [69, null, null, null] } // Am
+        ]
+    },
+    // Maine, the Hundred-Mile Wilderness: wide and slow, in E minor.
+    wilderness: {
+        bpm: 60,
+        bars: [
+            { chord: [40, 59, 64, 67], melody: [71, null, null, 74] },  // Em
+            { chord: [36, 60, 64, 67], melody: [76, null, 74, null] },  // C
+            { chord: [43, 59, 62, 67], melody: [71, null, 67, null] },  // G
+            { chord: [38, 62, 66, 69], melody: [69, null, null, null] }, // D
+            { chord: [40, 59, 64, 67], melody: [79, null, 78, 76] },    // Em
+            { chord: [36, 60, 64, 67], melody: [76, null, 74, 72] },    // C
+            { chord: [38, 62, 66, 69], melody: [74, null, 69, null] },  // D
+            { chord: [40, 59, 64, 67], melody: [71, null, null, null] } // Em
         ]
     },
     // Title, opening and endings: a slower campfire tune in D major.
@@ -65,6 +95,8 @@ export const MUSIC = {
     }
 };
 
+// Trail maps can choose their own loop with `music` in the map data
+// (Milestone 14: 'alone' in Act III, 'wilderness' in Maine); others play 'trail'.
 // Which loop each scene plays (scenes not listed keep whatever is playing).
 export const SCENE_MUSIC = {
     Title: 'home',

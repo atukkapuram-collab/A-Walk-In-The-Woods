@@ -1,9 +1,9 @@
-// Map 1: North Georgia, early spring. Cold rain, steep switchbacks.
-// Design blueprint, Location Progression: the outfitter at the trailhead
-// (Event 1), the muddy climb (Event 2), ends at the shelter (Act I close).
-// Order: trailhead, salesman and Dale (bottom) -> Event 1 -> log gate ->
-// Sunshine -> Event 2 (muddy climb) -> shelter and campfire -> Act I close ->
-// exit (top). Legend: src/data/maps/legend.js. `npm test` checks this map.
+// Map 1: North Georgia in March (book chapters 2-5). Cold rain, bare trees,
+// steep switchbacks: Amicalola Falls and Springer Mountain.
+// Design blueprint, Location Progression. Order: trailhead (bottom) ->
+// E2 Katz Lightens His Load (the first climb) -> log gate -> E3 Mary Ellen
+// (she meets you on the trail) -> shelter and campfire -> Act I close (night)
+// -> exit (top). Legend: src/data/maps/legend.js. `npm test` checks this map.
 import { LEGEND } from './legend.js';
 
 export default {
@@ -27,7 +27,7 @@ export default {
         'TTTTTTTTT..,,,,RR,,,,TTTTTTTTT', //  9
         'TTTTTTTT,..,,,,,,,,TTTTTTTTTTT', // 10
         'TTTTL,,,,..,,,,,TTTTTTTTTTTTTT', // 11  side nook to the west
-        'TTT,R,,,,..,,,BTTTTTTTTTTTTTTT', // 12
+        'TTT,R,,,,..,,,NTTTTTTTTTTTTTTT', // 12
         'TTT,,,,,,..,,,,TTTTTTTTTTTTTTT', // 13
         'TTTT,,,,,..,,,,,TTTTTTTTTTTTTT', // 14  muddy climb: Event 2 across this row
         'TTTTT,,,,..,,,,,,,,TTTTTTTTTTT', // 15
@@ -37,7 +37,7 @@ export default {
         'TTTTTTTT,,,,,,,..,WWWW,TTTTTTT', // 19  stream to the east
         'TTTTTTTTT,,,,,,..,,WW,,TTTTTTT', // 20
         'TTTTTTTTTT,,,,,..,,,,,,TTTTTTT', // 21
-        'TTTTTTTTTT,,B,,..,,,,,TTTTTTTT', // 22
+        'TTTTTTTTTT,,N,,..,,,,,TTTTTTTT', // 22
         'TTTTTTTTTTTTTTTGGTTTTTTTTTTTTT', // 23  fallen log: opens after Event 1
         'TTTTTTTTT,,,,,,..,,,,,,TTTTTTT', // 24
         'TTTTTTTT,,R,,,,..,,,,,,,TTTTTT', // 25
@@ -52,31 +52,34 @@ export default {
     // Show the "walk" and "talk" hints on this map (tutorial, design blueprint).
     tutorialHints: true,
 
-    // Talk triggers: face the character and press Space or Enter.
-    // Both the salesman and Dale start the outfitter event.
+    // Mary Ellen stands by the trail; stepping onto the row in front of her starts E3.
     npcs: [
-        { id: 'salesman', x: 13, y: 27, facing: 'right', sprite: 'salesman', talk: 'event1_outfitter' },
-        { id: 'dale', x: 13, y: 26, facing: 'right', sprite: 'dale', talk: 'event1_outfitter' },
-        // Sunshine jogs past on the first steps, before the muddy climb ("Morning!").
-        { id: 'sunshine', x: 18, y: 21, facing: 'down', sprite: 'sunshine', talk: 'sunshine_morning' }
+        { id: 'maryEllen', x: 12, y: 13, facing: 'down', sprite: 'maryEllen' }
     ],
 
     // Step triggers: a rectangle of tiles; the event starts when a step ends inside it.
     triggers: [
-        { event: 'event2_going_home', x: 4, y: 14, w: 12, h: 1 },
-        // At the crowded shelter: the first night under the stars (Act I close).
+        // Day one and two: the approach trail and the first climb (E2).
+        { event: 'e2_lightens_load', x: 9, y: 24, w: 14, h: 1 },
+        // Mary Ellen (E3).
+        { event: 'e3_mary_ellen', x: 4, y: 14, w: 12, h: 1 },
+        // At the crowded shelter: the woods at night (Act I close).
         { event: 'act1_close', x: 19, y: 3, w: 6, h: 1 }
     ],
 
-    // Sign and overlook lines: the narrator's voice for this act (Milestone 5).
-    signs: [{ x: 17, y: 27, text: "The sign says Katahdin, Maine: 2,190 miles. At fourteen miles a day you'll be done by August. You have checked this math eleven times." }],
-    overlook: { x: 4, y: 11, text: "Through the bare trees, ridge after ridge fades into the rain. Every one is a mile you have to walk, and for a moment you don't mind." },
+    // Signs and the overlook. Signs can unlock Trail Journal entries (src/data/journal.js).
+    signs: [
+        { x: 17, y: 27, text: "The sign says Katahdin, Maine: 2,190 miles. At fourteen miles a day I'll be done by August. I have checked this math eleven times.", journal: 'blazes' },
+        { x: 12, y: 22, text: "A bronze plaque on the way up Springer Mountain. The whole trail, it says, was Benton MacKaye's idea, back in 1921.", journal: 'mackaye' },
+        { x: 14, y: 12, text: 'Another plaque, for Myron Avery, who mapped and measured nearly every mile of the trail and bullied it into being.', journal: 'avery' }
+    ],
+    overlook: { x: 4, y: 11, text: "Through the bare trees, ridge after ridge fades into the rain. Every one is a mile I have to walk, and for a moment I don't mind." },
 
-    // Exit: the trail's north end leads to the travel screen and Map 2.
+    // Exit: the trail's north end leads to the travel screen and the Smokies.
     exit: { x: 20, y: 1, w: 4, h: 1 },
 
     // Gates: solid until their event is finished, then they become path.
     gates: [
-        { id: 'trailhead-log', opensAfter: 'event1_outfitter', tiles: [[15, 23], [16, 23]] }
+        { id: 'trailhead-log', opensAfter: 'e2_lightens_load', tiles: [[15, 23], [16, 23]] }
     ]
 };

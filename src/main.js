@@ -12,6 +12,8 @@ import { TravelScene } from './scenes/TravelScene.js';
 import { PauseScene } from './scenes/PauseScene.js';
 import { SettingsScene } from './scenes/SettingsScene.js';
 import { EndingsFoundScene } from './scenes/EndingsFoundScene.js';
+import { JournalScene } from './scenes/JournalScene.js';
+import { CreditsScene } from './scenes/CreditsScene.js';
 import { gameState } from './state/GameState.js';
 import { audio } from './systems/Audio.js';
 
@@ -31,9 +33,9 @@ const config = {
         autoCenter: Scale.CENTER_BOTH
     },
     // Order is draw order: the HUD and then the Dialogue overlay draw above the
-    // trail map; the menus (Pause, Settings, Endings Found) draw above everything.
+    // trail map; the menus (Pause, Settings, Endings Found, Journal) draw above everything.
     scene: [BootScene, TitleScene, OpeningScene, ActCardScene, TravelScene, TrailScene, EndingScene,
-        HUDScene, DialogueScene, PauseScene, SettingsScene, EndingsFoundScene]
+        HUDScene, DialogueScene, PauseScene, SettingsScene, EndingsFoundScene, JournalScene, CreditsScene]
 };
 
 document.addEventListener('DOMContentLoaded', () => {

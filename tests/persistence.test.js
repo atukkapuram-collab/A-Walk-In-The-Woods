@@ -21,12 +21,13 @@ describe('saving endings found', () => {
         recordEnding('changedRoute', store);
         recordEnding('earlyDeparture', store);
         expect(loadSave(store).endingsFound).toEqual(['changedRoute', 'earlyDeparture']);
-        expect(JSON.parse(store.data[SAVE_KEY]).version).toBe(1);
+        expect(JSON.parse(store.data[SAVE_KEY]).version).toBe(2);
     });
 
     it('never crashes on a corrupt, foreign or newer record', () => {
         expect(loadSave(memoryStore({ [SAVE_KEY]: '{not json' }))).toEqual(defaultSave());
-        expect(loadSave(memoryStore({ [SAVE_KEY]: '{"version":1,"endingsFound":"oops","settings":{}}' }))).toEqual(defaultSave());
+        expect(loadSave(memoryStore({ [SAVE_KEY]: '{"version":2,"endingsFound":"oops","journalFound":[],"settings":{}}' }))).toEqual(defaultSave());
+        expect(loadSave(memoryStore({ [SAVE_KEY]: '{"version":2,"endingsFound":[],"journalFound":"oops","settings":{}}' }))).toEqual(defaultSave());
         expect(loadSave(memoryStore({ [SAVE_KEY]: '{"version":99,"endingsFound":[],"settings":{}}' }))).toEqual(defaultSave());
     });
 

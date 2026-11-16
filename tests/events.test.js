@@ -77,7 +77,7 @@ describe('EventRunner', () => {
 describe.each(Object.values(EVENTS))('event $id', (event) => {
     it('uses only known step types and known speakers', () => {
         for (const step of event.steps) {
-            const kinds = ['narrate', 'say', 'choose'].filter((k) => step[k] !== undefined);
+            const kinds = ['narrate', 'say', 'choose', 'result', 'journal'].filter((k) => step[k] !== undefined);
             expect(kinds.length, JSON.stringify(step)).toBe(1);
             if (step.say) expect(SPEAKERS[step.say], step.say).toBeDefined();
         }
@@ -112,26 +112,6 @@ describe.each(Object.values(EVENTS))('event $id', (event) => {
         for (let i = 0; i < options; i++) {
             expect(playThrough(event, i).at(-1).type).toBe('end');
         }
-    });
-});
-
-describe('Events 1 and 2 match the scene outline', () => {
-    const effectsOf = (id) => EVENTS[id].steps.find((s) => s.choose).choose.map((o) => o.effects);
-
-    it('Event 1: the Outfitter', () => {
-        expect(effectsOf('event1_outfitter')).toEqual([
-            { supplies: 2, stamina: -1 },
-            { stamina: 1, supplies: -1 },
-            { morale: 1, bond: 1, supplies: -1 }
-        ]);
-    });
-
-    it("Event 2: I'm Going Home", () => {
-        expect(effectsOf('event2_going_home')).toEqual([
-            { miles: 'plus', bond: -1 },
-            { bond: 2, supplies: -1, miles: 'slow' },
-            { morale: 1 }
-        ]);
     });
 });
 
